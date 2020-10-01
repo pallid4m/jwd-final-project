@@ -32,11 +32,8 @@ public class LoginCommand implements Command {
             System.out.println(user);
             session.setAttribute(ATTRIBUTE_USER, user);
             resp.sendRedirect(USER_PAGE);
-        } catch (UserNotFoundServiceException e) {
-            session.setAttribute(ATTRIBUTE_AUTHORIZATION_MESSAGE, "wrong_data");
-            resp.sendRedirect(LOGIN_PAGE);
         } catch (ServiceException e) {
-            session.setAttribute(ATTRIBUTE_AUTHORIZATION_MESSAGE, "bd_error");
+            session.setAttribute(ATTRIBUTE_AUTH_MESSAGE, "error");
             resp.sendRedirect(LOGIN_PAGE);
         }
     }

@@ -1,5 +1,6 @@
 package edu.demo.controller.command.impl;
 
+import edu.demo.bean.AuthDetail;
 import edu.demo.controller.command.Command;
 import edu.demo.service.ServiceFactory;
 import edu.demo.service.UserService;
@@ -29,7 +30,7 @@ public class RegistrationCommand implements Command {
 
         UserService userService = ServiceFactory.getInstance().getUserService();
 
-        RegistrationData registrationData = new RegistrationData();
+        AuthDetail registrationData = new AuthDetail();
         registrationData.setEmail(email);
         registrationData.setLogin(login);
         registrationData.setPassword(password);
@@ -42,8 +43,6 @@ public class RegistrationCommand implements Command {
             } else {
                 session.setAttribute(ATTRIBUTE_REGISTRATION_MESSAGE, "registration_error");
             }
-        } catch (UserAlreadyExistsServiceException e) {
-            session.setAttribute(ATTRIBUTE_REGISTRATION_MESSAGE, "user_already_exists");
         } catch (ServiceException e) {
         }
         resp.sendRedirect(REGISTRATION_PAGE);
