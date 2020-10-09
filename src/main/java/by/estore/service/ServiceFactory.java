@@ -1,13 +1,13 @@
 package by.estore.service;
 
-import by.estore.service.impl.ProductServiceImpl;
+import by.estore.service.impl.GoodServiceImpl;
 import by.estore.service.impl.UserServiceImpl;
 
 public final class ServiceFactory {
     private static final ServiceFactory instance = new ServiceFactory();
 
     private final UserService userService = new UserServiceImpl();
-    private final ProductService productService = new ProductServiceImpl();
+    private final GoodService goodService = new GoodServiceImpl();
 
     private ServiceFactory() {}
 
@@ -19,7 +19,7 @@ public final class ServiceFactory {
         return userService;
     }
 
-    public ProductService getProductService() {
-        return productService;
+    public GoodService getGoodService() {
+        return goodService;
     }
 }

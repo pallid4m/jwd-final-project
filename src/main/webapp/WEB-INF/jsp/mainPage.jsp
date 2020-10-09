@@ -13,10 +13,10 @@
 
     <p>products:</p>
     <ul class="list-group">
-        <c:if test="${!empty products}">
-            <c:forEach var="product" items="${products}">
+        <c:if test="${!empty goods}">
+            <c:forEach var="good" items="${goods}">
                 <ul>
-                    <li class="list-group-item">${product.name}; ${product.description}</li>
+                    <li class="list-group-item">${good.name}; ${good.description}</li>
                 </ul>
             </c:forEach>
         </c:if>

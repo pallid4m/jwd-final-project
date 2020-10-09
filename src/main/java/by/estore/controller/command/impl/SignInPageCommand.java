@@ -13,8 +13,7 @@ public class SignInPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignInPageCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("WEB-INF/jsp/signInPage.jsp").forward(req, resp);
-        return null;
     }
 }

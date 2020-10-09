@@ -21,7 +21,7 @@ public class MainController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandName = req.getParameter("command");
         Command command = commandProvider.getCommand(commandName);
-        String ret = command.execute(req, resp);
+        command.execute(req, resp);
     }
 
     @Override

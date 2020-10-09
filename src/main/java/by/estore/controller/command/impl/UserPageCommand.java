@@ -13,8 +13,7 @@ public class UserPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UserPageCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/jsp/userPage.jsp").forward(req, resp);
-        return null;
     }
 }
