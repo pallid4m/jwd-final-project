@@ -15,6 +15,7 @@ public class AuthenticationFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        logger.debug("authentication filter");
         super.doFilter(req, res, chain);
     }
 }

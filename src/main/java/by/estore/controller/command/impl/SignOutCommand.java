@@ -1,7 +1,7 @@
 package by.estore.controller.command.impl;
 
 import by.estore.controller.command.Command;
-import by.estore.controller.command.RequestParameter;
+import by.estore.controller.command.RouteHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +28,6 @@ public class SignOutCommand implements Command {
             session.invalidate();
         }
 
-        resp.sendRedirect(req.getContextPath() + RequestParameter.MAIN_PAGE);
+        resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);
     }
 }

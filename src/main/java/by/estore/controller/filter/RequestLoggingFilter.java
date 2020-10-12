@@ -25,22 +25,15 @@ public class RequestLoggingFilter extends HttpFilter {
 
     private void logAllInfo(HttpServletRequest req, HttpServletResponse res) {
 
-//        logger.debug("method: {}", req.getMethod());
-//        logger.debug("uri: {}", req.getRequestURI());
-//        logger.debug("query: {}", req.getQueryString());
-//        logger.debug("protocol: {}", req.getProtocol());
-//        logger.debug("url: {}", req.getRequestURL());
-//        logger.debug("locale: {}", req.getLocale());
-
         String params = Collections.list(req.getParameterNames()).stream()
                 .map(param -> "\t" + param + ": " + Arrays.toString(req.getParameterValues(param)))
                 .collect(Collectors.joining("\n"));
         logger.debug("params\n{}", params);
 
-//        String headers = Collections.list(req.getHeaderNames()).stream()
-//                .map(header -> "\t" + header + ": " + req.getHeader(header))
-//                .collect(Collectors.joining("\n"));
-//        logger.debug("headers\n{}", headers);
+        String headers = Collections.list(req.getHeaderNames()).stream()
+                .map(header -> "\t" + header + ": " + req.getHeader(header))
+                .collect(Collectors.joining("\n"));
+        logger.debug("headers\n{}", headers);
 
         if (req.getSession() != null) {
             String session = Collections.list(req.getSession().getAttributeNames()).stream()

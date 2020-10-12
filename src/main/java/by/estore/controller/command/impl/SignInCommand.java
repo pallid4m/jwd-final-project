@@ -2,7 +2,8 @@ package by.estore.controller.command.impl;
 
 import by.estore.bean.User;
 import by.estore.controller.command.Command;
-import by.estore.controller.command.RequestParameter;
+import by.estore.controller.command.RouteHolder;
+import by.estore.controller.validation.UserValidator;
 import by.estore.controller.validation.Validator;
 import by.estore.service.ServiceFactory;
 import by.estore.service.exception.AuthorizationException;
@@ -16,41 +17,31 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SignInCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignInCommand.class);
 
     private final String AUTH_TOKEN = "token";
 
+    public static final String LOGIN_PARAM = "login";
+    public static final String EMAIL_PARAM = "email";
+    public static final String PASSWORD_PARAM = "password";
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = req.getParameter(RequestParameter.EMAIL_PARAM);
-        String password = req.getParameter(RequestParameter.PASSWORD_PARAM);
-
-        Map<String, String> invalidMessages = new HashMap<>();
-        boolean requestValidation = true;
-
-        if (!Validator.isEmailValid(email)) {
-            requestValidation = false;
-            invalidMessages.put("invalid_email", Validator.INVALID_EMAIL_MESSAGE);
-        }
-
-        if (!Validator.isPasswordValid(password)) {
-            requestValidation = false;
-            invalidMessages.put("invalid_password", Validator.INVALID_PASSWORD_MESSAGE);
-        }
-
-        if (!requestValidation) {
-            req.getSession().setAttribute("invalid_messages", invalidMessages);
-            resp.sendRedirect(req.getContextPath() + RequestParameter.MAIN_PAGE);
-            return;
-        }
+        String email = req.getParameter(EMAIL_PARAM);
+        String password = req.getParameter(PASSWORD_PARAM);
 
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
+
+        Validator<User> validator = new UserValidator();
+        if (!validator.isValid(user)) {
+            logger.info("user fields aren't valid");
+            resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);
+            return;
+        }
 
         boolean isAuthorize = false;
         try {
@@ -68,6 +59,6 @@ public class SignInCommand implements Command {
             resp.addCookie(new Cookie("auth", AUTH_TOKEN));
         }
 
-        resp.sendRedirect(req.getContextPath() + RequestParameter.MAIN_PAGE);
+        resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);
     }
 }

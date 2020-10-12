@@ -19,13 +19,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}">Main</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="main?command=catalog-page">Catalog</a>
+            </li>
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}?${pageContext.request.queryString}&lang=en_US">English</a>
+                <a class="nav-link" href="main?${pageContext.request.queryString}&lang=en_US">English</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}?${pageContext.request.queryString}&lang=ru_RU">Russian</a>
+                <a class="nav-link" href="main?${pageContext.request.queryString}&lang=ru_RU">Russian</a>
             </li>
         </ul>
     </nav>

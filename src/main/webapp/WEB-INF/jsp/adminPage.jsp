@@ -6,12 +6,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/main.css"/>">
     <title>Admin</title>
 </head>
 <body>
     <jsp:include page="header.jsp"/>
 
-    <div class="container-fluid">
+    <div class="container-fluid admin-content">
         <div class="row">
             <div class="col-md-2">
                 <nav class="nav flex-column">
@@ -22,7 +23,6 @@
                 </nav>
             </div>
             <div class="col-md-10">
-                <h4>User list</h4>
                 <button class="btn btn btn-light" type="button" data-toggle="collapse" data-target="#collapseUserForm" aria-expanded="false" aria-controls="collapseUserForm">
                     Add user
                 </button>
@@ -31,19 +31,15 @@
                         <form>
                             <div class="row">
                                 <div class="form-group col">
-                                    <label for="inputId">Id</label>
-                                    <input type="text" class="form-control" id="inputId" placeholder="Id">
-                                </div>
-                                <div class="form-group col">
-                                    <label for="inputEmail">Email</label>
+                                    <label class="sr-only" for="inputEmail">Email</label>
                                     <input type="text" class="form-control" id="inputEmail" placeholder="Email">
                                 </div>
                                 <div class="form-group col">
-                                    <label for="inputPassword">Password</label>
+                                    <label class="sr-only" for="inputPassword">Password</label>
                                     <input type="text" class="form-control" id="inputPassword" placeholder="Password">
                                 </div>
                                 <div class="form-group col">
-                                    <label for="selectRole">Role</label>
+                                    <label class="sr-only" for="selectRole">Role</label>
                                     <select class="form-control" id="selectRole">
                                         <option value="">Select role...</option>
                                         <option>admin</option>
@@ -55,7 +51,7 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-hover table-sm">
+                <table class="table table-sm table-borderless">
                     <caption>List of users</caption>
                     <thead class="table-dark">
                     <tr>
@@ -69,11 +65,10 @@
                     <tbody>
                     <c:forEach var="user" items="${sessionScope.users}">
                         <tr>
-                            <th scope="row">#</th>
+                            <th scope="row">${user.id}</th>
                             <td>${user.email}</td>
                             <td>${user.password}</td>
-<%--                            <td>${user.role}</td>--%>
-                            <td>role</td>
+                            <td>${user.role.name}</td>
                             <td>
                                 <a href="#">View</a>
                                 <a href="#">Edit</a>
@@ -85,6 +80,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
 
     <jsp:include page="footer.jsp"/>

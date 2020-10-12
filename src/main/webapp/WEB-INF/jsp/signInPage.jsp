@@ -1,36 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${!empty sessionScope.lang}">
+    <fmt:setLocale value="${sessionScope.lang}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <title>Sign in</title>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/main.css"/>">
+    <title><fmt:message key="sign-in.title"/></title>
 </head>
 <body>
     <jsp:include page="header.jsp"/>
 
-    <form action="main?command=sign-in" method="post">
-        <div class="form-row col-md-8">
-            <div class="form-group col-md-4">
-                <label for="inputEmail">Email</label>
-                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus=""/>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="inputPassword">Password</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required=""/>
-            </div>
+    <form class="sign-in" action="main?command=sign-in" method="post">
+        <div class="form-group">
+            <label class="sr-only" for="inputEmail"><fmt:message key="form.email"/></label>
+            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="form.email"/>" required="" autofocus=""/>
         </div>
-        <div class="form-group col-md-2">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck">
-                <label class="form-check-label" for="gridCheck">Remember me</label>
-            </div>
+        <div class="form-group">
+            <label class="sr-only" for="inputPassword"><fmt:message key="form.password"/></label>
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="form.password"/>" required=""/>
         </div>
-        <div class="form-group col-md-2">
-            <button type="submit" class="btn btn-primary">Sign in</button>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="rememberCheck">
+            <label class="form-check-label" for="rememberCheck"><fmt:message key="form.remember-me"/></label>
         </div>
+        <button type="submit" class="btn btn-primary"><fmt:message key="sign-in.button"/></button>
     </form>
 
     <jsp:include page="footer.jsp"/>

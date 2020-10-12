@@ -1,6 +1,7 @@
 package by.estore.controller.command;
 
 import by.estore.controller.command.impl.*;
+import by.estore.controller.command.impl.page.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ public final class CommandProvider {
         commands.put("main-page", new MainPageCommand());
         commands.put("admin-page", new AdminPageCommand());
         commands.put("user-page", new UserPageCommand());
+        commands.put("catalog-page", new CatalogPageCommand());
         commands.put("product-page", new ProductPageCommand());
         commands.put("sign-in-page", new SignInPageCommand());
         commands.put("sign-up-page", new SignUpPageCommand());

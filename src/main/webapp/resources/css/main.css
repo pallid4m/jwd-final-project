@@ -1,0 +1,20 @@
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+.sign-in, .sign-up {
+    width: 100%;
+    max-width: 300px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    margin: auto;
+}
+
+.admin-content, .catalog {
+    padding-top: 40px !important;
+}
+
+.card-item {
+    padding: 10px;
+}
