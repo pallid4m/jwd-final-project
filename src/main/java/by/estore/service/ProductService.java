@@ -2,7 +2,6 @@ package by.estore.service;
 
 import by.estore.bean.Category;
 import by.estore.bean.Product;
-import by.estore.controller.dto.Pagination;
 import by.estore.service.exception.ServiceException;
 
 import java.util.List;

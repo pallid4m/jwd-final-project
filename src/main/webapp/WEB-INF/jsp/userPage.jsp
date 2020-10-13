@@ -1,18 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${!empty sessionScope.lang}">
+    <fmt:setLocale value="${sessionScope.lang}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!doctype html>
-<html lang="en">
+<html lang="<fmt:message key="html.lang"/>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <title>User</title>
+    <title><fmt:message key="user.title"/></title>
 </head>
 <body>
 
     <jsp:include page="header.jsp"/>
 
-    <p>user:</p>
     <c:if test="${!empty sessionScope.user}">
         <p>id: <c:out value="${sessionScope.user.id}"/></p>
         <p>email: <c:out value="${sessionScope.user.email}"/></p>

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import java.util.Base64;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,5 +25,11 @@ public class CustomTest {
     public void loadDBBundleTest() {
         String user = DBResourceManager.getInstance().getValue("db.user");
         assertEquals("root", user);
+    }
+
+    @Test
+    public void uuidTest() {
+        logger.info(UUID.randomUUID());
+        logger.info(UUID.fromString("1-2-3-4-5"));
     }
 }

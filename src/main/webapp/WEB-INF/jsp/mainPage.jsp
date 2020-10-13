@@ -1,27 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${!empty sessionScope.lang}">
+    <fmt:setLocale value="${sessionScope.lang}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!doctype html>
-<html lang="en">
+<html lang="<fmt:message key="html.lang"/>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/main.css"/>">
-    <title>Main</title>
+    <title><fmt:message key="main.title"/></title>
 </head>
 <body>
     <jsp:include page="header.jsp"/>
-
-    <p>products:</p>
-    <ul class="list-group">
-        <c:if test="${!empty lowPriceProducts}">
-            <c:forEach var="product" items="${lowPriceProducts}">
-                <ul>
-                    <li class="list-group-item">${product.name}; ${product.description}</li>
-                </ul>
-            </c:forEach>
-        </c:if>
-    </ul>
 
     <div class="container">
         <h3>Low price</h3>

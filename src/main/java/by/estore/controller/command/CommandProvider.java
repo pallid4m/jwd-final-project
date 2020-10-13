@@ -10,17 +10,18 @@ public final class CommandProvider {
     private final Map<String, Command> commands = new HashMap<>();
 
     public CommandProvider() {
-        commands.put("main-page", new MainPageCommand());
-        commands.put("admin-page", new AdminPageCommand());
-        commands.put("user-page", new UserPageCommand());
-        commands.put("catalog-page", new CatalogPageCommand());
-        commands.put("product-page", new ProductPageCommand());
-        commands.put("sign-in-page", new SignInPageCommand());
-        commands.put("sign-up-page", new SignUpPageCommand());
+        commands.put(CommandName.MAIN_PAGE, new MainPageCommand());
+        commands.put(CommandName.ADMIN_PAGE, new AdminPageCommand());
+        commands.put(CommandName.USER_PAGE, new UserPageCommand());
+        commands.put(CommandName.CATALOG_PAGE, new CatalogPageCommand());
+        commands.put(CommandName.PRODUCT_PAGE, new ProductPageCommand());
+        commands.put(CommandName.CART_PAGE, new CartPageCommand());
+        commands.put(CommandName.SIGN_IN_PAGE, new SignInPageCommand());
+        commands.put(CommandName.SIGN_UP_PAGE, new SignUpPageCommand());
 
-        commands.put("sign-in", new SignInCommand());
-        commands.put("sign-up", new SignUpCommand());
-        commands.put("sign-out", new SignOutCommand());
+        commands.put(CommandName.SIGN_IN, new SignInCommand());
+        commands.put(CommandName.SIGN_UP, new SignUpCommand());
+        commands.put(CommandName.SIGN_OUT, new SignOutCommand());
     }
 
     public Command getCommand(String commandName) {

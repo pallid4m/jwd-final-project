@@ -29,6 +29,8 @@ public class AdminPageCommand implements Command {
             products = ServiceFactory.getInstance().getProductService().getAllProducts();
         } catch (ServiceException e) {
             logger.error(e);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
+            return;
         }
 
         HttpSession session = req.getSession(false);

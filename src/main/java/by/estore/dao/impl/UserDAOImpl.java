@@ -1,5 +1,6 @@
 package by.estore.dao.impl;
 
+import by.estore.bean.Order;
 import by.estore.bean.Role;
 import by.estore.bean.User;
 import by.estore.dao.UserDAO;
@@ -14,24 +15,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserDAOImpl implements UserDAO {
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
 
-    private final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private final String SAVE_USER_QUERY = "INSERT INTO `users` (`email`, `password`, `role_id`) VALUES (?, ?, 2)";
-    private final String DELETE_USER_BY_ID_QUERY = "DELETE FROM `users` WHERE `id` = ?";
-    private final String GET_USER_BY_ID_QUERY = "SELECT u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id` WHERE u.`id` = ?";
-    private final String GET_USER_BY_EMAIL_QUERY = "SELECT u.`id`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id` WHERE u.`email` = ?";
-    private final String GET_ALL_USERS_QUERY = "SELECT u.`id`, u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id`;";
+    private static final String SAVE_USER_QUERY = "INSERT INTO `users` (`email`, `password`, `role_id`) VALUES (?, ?, 2);";
+    private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM `users` WHERE `id` = ?;";
+    private static final String GET_USER_BY_ID_QUERY = "SELECT u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id` WHERE u.`id` = ?;";
+    private static final String GET_USER_BY_EMAIL_QUERY = "SELECT u.`id`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id` WHERE u.`email` = ?;";
+    private static final String GET_ALL_USERS_QUERY = "SELECT u.`id`, u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id`;";
+
+    private static final String GET_ALL_ORDERS_QUERY = "SELECT `id`, `created`, `status` FROM `orders` WHERE `user_id` = ?;";
 
     private static final String USER_ID = "id";
     private static final String USER_EMAIL = "email";
     private static final String USER_PASSWORD = "password";
     private static final String USER_ROLE_ID = "role_id";
     private static final String ROLE_NAME = "name";
+
+    private static final String ORDER_ID = "id";
+    private static final String ORDER_DATE = "created";
+    private static final String ORDER_STATUS = "status";
 
     @Override
     public boolean saveUser(User user) throws DAOException {
@@ -115,14 +124,17 @@ public class UserDAOImpl implements UserDAO {
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                user = new User();
-                user.setId(id);
-                user.setEmail(resultSet.getString(USER_EMAIL));
-                user.setPassword(resultSet.getString(USER_PASSWORD));
+
                 Role role = new Role();
                 role.setId(resultSet.getByte(USER_ROLE_ID));
                 role.setName(resultSet.getString(ROLE_NAME));
-                user.setRole(role);
+
+                user = User.builder()
+                        .setId(id)
+                        .setEmail(resultSet.getString(USER_EMAIL))
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setRole(role)
+                        .build();
             }
 
             connection.commit();
@@ -159,14 +171,17 @@ public class UserDAOImpl implements UserDAO {
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getLong(USER_ID));
-                user.setEmail(email);
-                user.setPassword(resultSet.getString(USER_PASSWORD));
+
                 Role role = new Role();
                 role.setId(resultSet.getByte(USER_ROLE_ID));
                 role.setName(resultSet.getString(ROLE_NAME));
-                user.setRole(role);
+
+                user = User.builder()
+                        .setId(resultSet.getLong(USER_ID))
+                        .setEmail(email)
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setRole(role)
+                        .build();
             }
 
             connection.commit();
@@ -202,14 +217,18 @@ public class UserDAOImpl implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getLong(USER_ID));
-                user.setEmail(resultSet.getString(USER_EMAIL));
-                user.setPassword(resultSet.getString(USER_PASSWORD));
+
                 Role role = new Role();
                 role.setId(resultSet.getByte(USER_ROLE_ID));
                 role.setName(resultSet.getString(ROLE_NAME));
-                user.setRole(role);
+
+                User user = User.builder()
+                        .setId(resultSet.getLong(USER_ID))
+                        .setEmail(resultSet.getString(USER_EMAIL))
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setRole(role)
+                        .build();
+
                 users.add(user);
             }
 
@@ -228,5 +247,46 @@ public class UserDAOImpl implements UserDAO {
         }
 
         return users;
+    }
+
+    @Override
+    public List<Order> getAllOrders(User user) throws DAOException {
+        List<Order> orders = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(GET_ALL_ORDERS_QUERY);
+            preparedStatement.setLong(1, user.getId());
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getLong(ORDER_ID));
+                order.setOrderDate(resultSet.getTimestamp(ORDER_DATE));
+                order.setOrderStatus(resultSet.getString(ORDER_STATUS));
+                orders.add(order);
+            }
+
+            connection.commit();
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
+
+        return orders;
     }
 }

@@ -3,7 +3,8 @@ package by.estore.controller.command.impl;
 import by.estore.bean.User;
 import by.estore.controller.command.Command;
 import by.estore.controller.command.RouteHolder;
-import by.estore.controller.validation.UserValidator;
+import by.estore.controller.dto.UserAuth;
+import by.estore.controller.validation.UserAuthValidator;
 import by.estore.controller.validation.Validator;
 import by.estore.service.ServiceFactory;
 import by.estore.service.exception.ServiceException;
@@ -12,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,49 +20,55 @@ import java.io.IOException;
 public class SignUpCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignUpCommand.class);
 
-    private final String AUTH_TOKEN = "token";
-
     public static final String LOGIN_PARAM = "login";
     public static final String EMAIL_PARAM = "email";
     public static final String PASSWORD_PARAM = "password";
     public static final String CONFIRM_PASSWORD_PARAM = "confirm-password";
     public static final String PHONE_PARAM = "phone";
+    public static final String REMEMBER_ME_PARAM = "remember-me";
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String email = req.getParameter(EMAIL_PARAM);
         String password = req.getParameter(PASSWORD_PARAM);
         String confirmPassword = req.getParameter(CONFIRM_PASSWORD_PARAM);
+        String rememberMe = req.getParameter(REMEMBER_ME_PARAM);
 
+        // TODO: 12-Oct-20 js
         if (!password.equals(confirmPassword)) {
             logger.info("Passwords don't match");
-            resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);
+            resp.sendRedirect(req.getContextPath() + RouteHolder.SIGN_UP_PAGE);
             return;
         }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        UserAuth userAuth = new UserAuth();
+        userAuth.setEmail(email);
+        userAuth.setPassword(password);
 
-        Validator<User> validator = new UserValidator();
-        if (!validator.isValid(user)) {
+        Validator<UserAuth> validator = new UserAuthValidator();
+        if (!validator.isValid(userAuth)) {
             logger.info("user fields aren't valid");
-            resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);
+            resp.sendRedirect(req.getContextPath() + RouteHolder.SIGN_UP_PAGE);
             return;
         }
 
-        boolean isRegistered = false;
+        User user = null;
         try {
-            isRegistered = ServiceFactory.getInstance().getUserService().register(user);
+            user = ServiceFactory.getInstance().getUserService().register(userAuth);
         } catch (UserAlreadyExistException e) {
             logger.info(e.getMessage());
         } catch (ServiceException e) {
             logger.error(e);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "pff");
+            return;
         }
 
-        if (isRegistered) {
+        if (user != null) {
             req.getSession().setAttribute("user", user);
-            resp.addCookie(new Cookie("auth", AUTH_TOKEN));
+            if (rememberMe != null) {
+                // TODO: 12-Oct-20 remember me
+            }
         }
 
         resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);

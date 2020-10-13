@@ -81,4 +81,53 @@ public class Product implements Serializable {
                 ", category=" + category +
                 '}';
     }
+
+    private Product(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.description = builder.description;
+        this.image = builder.image;
+        this.category = builder.category;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private Long id;
+        private String name;
+        private String description;
+        private String image;
+        private Category category;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setImage(String image) {
+            this.image = image;
+            return this;
+        }
+
+        public Builder setCategory(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this);
+        }
+    }
 }

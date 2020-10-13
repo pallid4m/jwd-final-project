@@ -14,6 +14,7 @@ public class MainPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // TODO: 12-Oct-20 low cost products
         req.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp").forward(req, resp);
     }
 }

@@ -1,5 +1,6 @@
 package by.estore.dao;
 
+import by.estore.bean.Order;
 import by.estore.bean.User;
 import by.estore.dao.exception.DAOException;
 
@@ -11,4 +12,6 @@ public interface UserDAO {
     User getUserById(Long id) throws DAOException;
     User getUserByEmail(String email) throws DAOException;
     List<User> getAllUsers() throws DAOException;
+
+    List<Order> getAllOrders(User user) throws DAOException;
 }

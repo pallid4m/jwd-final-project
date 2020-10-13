@@ -47,6 +47,8 @@ public class CatalogPageCommand implements Command {
                 products = ServiceFactory.getInstance().getProductService().getProductsByCategory(category, ITEMS_COUNT, offset);
             } catch (ServiceException e) {
                 logger.error(e);
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
+                return;
             }
 
             if (products == null) {

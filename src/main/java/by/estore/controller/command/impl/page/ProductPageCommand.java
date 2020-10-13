@@ -33,6 +33,8 @@ public class ProductPageCommand implements Command {
             product = ServiceFactory.getInstance().getProductService().getProductById(productId);
         } catch (ServiceException e) {
             logger.error(e);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
+            return;
         }
 
         if (product != null) {

@@ -1,13 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:if test="${!empty sessionScope.lang}">
+    <fmt:setLocale value="${sessionScope.lang}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <!doctype html>
-<html lang="en">
+<html lang="<fmt:message key="html.lang"/>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/main.css"/>">
-    <title>Catalog</title>
+    <title><fmt:message key="catalog.title"/></title>
 </head>
 <body>
 
@@ -17,8 +22,8 @@
         <div class="row">
             <div class="col-md-2">
                 <nav class="nav flex-column">
-                    <a class="nav-link active" href="main?command=catalog-page&category=phone">Phones</a>
-                    <a class="nav-link" href="main?command=catalog-page&category=laptop">Laptops</a>
+                    <a class="nav-link active" href="<c:url value="main?command=catalog-page&category=phone"/>"><fmt:message key="catalog.phones"/></a>
+                    <a class="nav-link" href="<c:url value="main?command=catalog-page&category=laptop"/>"><fmt:message key="catalog.laptops"/></a>
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </nav>
             </div>

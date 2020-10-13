@@ -6,13 +6,13 @@
 </c:if>
 <fmt:setBundle basename="messages"/>
 <!doctype html>
-<html lang="en">
+<html lang="<fmt:message key="html.lang"/>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/main.css"/>">
-    <title><fmt:message key="sign-in.title"/></title>
+    <title><fmt:message key="sign_in.title"/></title>
 </head>
 <body>
     <jsp:include page="header.jsp"/>
@@ -27,10 +27,11 @@
             <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="form.password"/>" required=""/>
         </div>
         <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="rememberCheck">
-            <label class="form-check-label" for="rememberCheck"><fmt:message key="form.remember-me"/></label>
+            <input type="checkbox" name="remember-me"  class="form-check-input" id="rememberCheck">
+            <label class="form-check-label" for="rememberCheck"><fmt:message key="form.remember_me"/></label>
         </div>
-        <button type="submit" class="btn btn-primary"><fmt:message key="sign-in.button"/></button>
+        <input type="hidden" name="csrf-token" value="${sessionScope.csrf_token}">
+        <button type="submit" class="btn btn-primary"><fmt:message key="sign_in.button"/></button>
     </form>
 
     <jsp:include page="footer.jsp"/>
