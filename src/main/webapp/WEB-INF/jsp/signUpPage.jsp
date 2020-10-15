@@ -28,13 +28,13 @@
         </div>
         <div class="form-group">
             <label class="sr-only" for="inputConfirmPassword"><fmt:message key="form.confirm_password"/></label>
-            <input type="password" name="password" id="inputConfirmPassword" class="form-control" placeholder="<fmt:message key="form.confirm_password"/>" required=""/>
+            <input type="password" name="confirm-password" id="inputConfirmPassword" class="form-control" placeholder="<fmt:message key="form.confirm_password"/>" required=""/>
         </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="rememberCheck">
             <label class="form-check-label" for="rememberCheck"><fmt:message key="form.remember_me"/></label>
         </div>
-        <input type="hidden" name="csrf-token" value="${sessionScope.csrf_token}">
+        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
         <button type="submit" class="btn btn-primary"><fmt:message key="sign_up.button"/></button>
     </form>
 

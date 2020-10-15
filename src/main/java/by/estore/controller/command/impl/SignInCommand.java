@@ -47,10 +47,10 @@ public class SignInCommand implements Command {
         User user = null;
         try {
             user = ServiceFactory.getInstance().getUserService().authorize(userAuth);
-        } catch (AuthorizationException e) {
+        } catch (UserNotFoundException | AuthorizationException e) {
             logger.info(e.getMessage());
-        } catch (UserNotFoundException e) {
-            logger.info(e.getMessage());
+            resp.sendRedirect(req.getContextPath() + RouteHolder.SIGN_IN_PAGE);
+            return;
         } catch (ServiceException e) {
             logger.error(e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "pff");

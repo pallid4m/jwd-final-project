@@ -17,12 +17,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="main?command=sign-out">Sign out</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="main?command=admin-page">Admin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="main?command=user-page">User</a>
-                </li>
+                <c:if test="${sessionScope.user.role.name == 'Admin'}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="main?command=admin-page">Admin</a>
+                    </li>
+                </c:if>
+                <c:if test="${sessionScope.user.role.name == 'User'}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="main?command=user-page">User</a>
+                    </li>
+                </c:if>
             </c:if>
             <li class="nav-item">
                 <a class="nav-link" href="main?command=catalog-page">Catalog</a>

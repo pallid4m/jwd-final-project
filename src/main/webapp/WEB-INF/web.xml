@@ -27,7 +27,7 @@
 
     <filter>
         <filter-name>requestLoggingFilter</filter-name>
-        <filter-class>by.estore.controller.filter.RequestLoggingFilter</filter-class>
+        <filter-class>by.estore.controller.filter.LoggingFilter</filter-class>
     </filter>
 
     <filter-mapping>

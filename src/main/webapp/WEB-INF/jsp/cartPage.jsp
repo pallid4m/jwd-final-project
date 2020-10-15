@@ -24,7 +24,7 @@
             <div>
                 <c:forEach var="product" items="${order.products}">
                     <div>
-                        <p><img src="<c:url value="/resources/img/product/${product.image}"/>" alt="${product.category.name}"></p>
+                        <p><img src="<c:url value="/resources/img/product/${product.category.name}/${product.image}"/>" alt="${product.category.name}"></p>
                         <p>${product.id}</p>
                         <p>${product.name}</p>
                         <p>${product.description}</p>

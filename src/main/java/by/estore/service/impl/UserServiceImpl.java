@@ -13,9 +13,9 @@ import by.estore.service.exception.UserAlreadyExistException;
 import by.estore.service.exception.UserNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
-import java.util.Set;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -103,8 +103,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("The user is not found.");
         }
 
-        // TODO: 08-Oct-20  to compare the passwords
-        if (!user.getPassword().equals(userAuth.getPassword())) {
+        if (!BCrypt.checkpw(userAuth.getPassword(), user.getPassword())) {
             throw new AuthorizationException("Wrong password.");
         }
 
@@ -126,9 +125,14 @@ public class UserServiceImpl implements UserService {
         }
 
         try {
-            // TODO: 08-Oct-20  to hash a password
-            DAOFactory.getInstance().getUserDAO().saveUser(userAuthToUser(userAuth));
-            user = DAOFactory.getInstance().getUserDAO().getUserByEmail(userAuth.getEmail());
+            String hash = BCrypt.hashpw(userAuth.getPassword(), BCrypt.gensalt());
+            userAuth.setPassword(hash);
+
+            boolean isSaved = DAOFactory.getInstance().getUserDAO().saveUser(userAuthToUser(userAuth));
+
+            if (isSaved) {
+                user = DAOFactory.getInstance().getUserDAO().getUserByEmail(userAuth.getEmail());
+            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -137,9 +141,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private User userAuthToUser(UserAuth userAuth) {
-        User user = new User();
-        user.setEmail(userAuth.getEmail());
-        user.setPassword(userAuth.getPassword());
-        return user;
+        return User.builder()
+                .setEmail(userAuth.getEmail())
+                .setPassword(userAuth.getPassword())
+                .build();
     }
 }

@@ -24,13 +24,28 @@ public class UserDAOImpl implements UserDAO {
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String SAVE_USER_QUERY = "INSERT INTO `users` (`email`, `password`, `role_id`) VALUES (?, ?, 2);";
-    private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM `users` WHERE `id` = ?;";
-    private static final String GET_USER_BY_ID_QUERY = "SELECT u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id` WHERE u.`id` = ?;";
-    private static final String GET_USER_BY_EMAIL_QUERY = "SELECT u.`id`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id` WHERE u.`email` = ?;";
-    private static final String GET_ALL_USERS_QUERY = "SELECT u.`id`, u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u JOIN `roles` AS r ON u.`role_id` = r.`id`;";
+    private static final String SAVE_USER_QUERY =
+            "INSERT INTO `users` (`email`, `password`, `role_id`) VALUES (?, ?, 2);";
 
-    private static final String GET_ALL_ORDERS_QUERY = "SELECT `id`, `created`, `status` FROM `orders` WHERE `user_id` = ?;";
+    private static final String DELETE_USER_BY_ID_QUERY =
+            "DELETE FROM `users` WHERE `id` = ?;";
+
+    private static final String GET_USER_BY_ID_QUERY =
+            "SELECT u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u " +
+            "JOIN `roles` AS r ON u.`role_id` = r.`id` " +
+            "WHERE u.`id` = ?;";
+
+    private static final String GET_USER_BY_EMAIL_QUERY =
+            "SELECT u.`id`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u " +
+            "JOIN `roles` AS r ON u.`role_id` = r.`id` " +
+            "WHERE u.`email` = ?;";
+
+    private static final String GET_ALL_USERS_QUERY =
+            "SELECT u.`id`, u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u " +
+            "JOIN `roles` AS r ON u.`role_id` = r.`id`;";
+
+    private static final String GET_ALL_ORDERS_QUERY =
+            "SELECT `id`, `created`, `status` FROM `orders` WHERE `user_id` = ?;";
 
     private static final String USER_ID = "id";
     private static final String USER_EMAIL = "email";
@@ -57,10 +72,13 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(2, user.getPassword());
 
             int records = preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
-//            logger.debug("User was added; count records: {}; returned id: {}", records, resultSet.getInt(1));
 
             connection.commit();
+
+            // TODO: 14-Oct-20 whats wrong?
+//            resultSet = preparedStatement.getGeneratedKeys();
+//            logger.debug("User was added; count records: {}; returned id: {}", records, resultSet.getInt(1));
+
             return true;
         } catch (ConnectionPoolException | SQLException e) {
             if (connection != null) {
@@ -72,7 +90,7 @@ public class UserDAOImpl implements UserDAO {
             }
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            connectionPool.closeConnection(connection, preparedStatement);
         }
     }
 

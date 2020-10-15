@@ -58,9 +58,11 @@ public class SignUpCommand implements Command {
             user = ServiceFactory.getInstance().getUserService().register(userAuth);
         } catch (UserAlreadyExistException e) {
             logger.info(e.getMessage());
+            resp.sendRedirect(req.getContextPath() + RouteHolder.SIGN_UP_PAGE);
+            return;
         } catch (ServiceException e) {
             logger.error(e);
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "pff");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
         }
 

@@ -33,13 +33,13 @@
                         <div class="card mb-3">
                             <div class="row card-item">
                                 <div class="col-md-2" style="max-width: 540px;">
-                                    <img class="card-img" src="<c:url value="/resources/img/product/${product.image}"/>" alt="${product.category.name}">
+                                    <img class="card-img" src="<c:url value="/resources/img/product/${product.category.name}/${product.image}"/>" alt="${product.category.name}">
                                 </div>
                                 <div class="col-md-10">
                                     <div class="card-body">
                                         <a href="<c:url value="main?command=product&id=${product.id}"/>"><h5 class="card-title">${product.name}</h5></a>
                                         <p class="card-text">${product.description}</p>
-                                        <p><strong>300.00 rub</strong></p>
+                                        <p><strong>${product.price} ${product.currency}</strong></p>
 <%--                                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
 <%--                                        <div class="btn-group">--%>
 <%--                                            <button class="btn btn-sm btn-outline-secondary" type="button">View</button>--%>

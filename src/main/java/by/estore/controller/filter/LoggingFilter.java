@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RequestLoggingFilter extends HttpFilter {
-    private static final Logger logger = LogManager.getLogger(RequestLoggingFilter.class);
+public class LoggingFilter extends HttpFilter {
+    private static final Logger logger = LogManager.getLogger(LoggingFilter.class);
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {

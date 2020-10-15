@@ -10,6 +10,7 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
 
 @WebFilter("/*")
 public class LocalizationFilter extends HttpFilter {
@@ -19,6 +20,10 @@ public class LocalizationFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         String lang = req.getParameter("lang");
         if (lang != null) {
+            logger.debug(req.getQueryString());
+            logger.debug(req.getLocale());
+//            res.setLocale(Locale.US);
+//            res.setLocale(new Locale("ru", "RU"));
             req.getSession().setAttribute("lang", lang);
         }
         super.doFilter(req, res, chain);

@@ -1,6 +1,7 @@
 package by.estore.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product implements Serializable {
@@ -10,6 +11,8 @@ public class Product implements Serializable {
     private String name;
     private String description;
     private String image;
+    private BigDecimal price;
+    private String currency;
     private Category category;
 
     public Product() {}
@@ -46,6 +49,22 @@ public class Product implements Serializable {
         this.image = image;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -63,12 +82,14 @@ public class Product implements Serializable {
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
                 Objects.equals(image, product.image) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(currency, product.currency) &&
                 Objects.equals(category, product.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, category);
+        return Objects.hash(id, name, description, image, price, category);
     }
 
     @Override
@@ -78,6 +99,8 @@ public class Product implements Serializable {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", image='" + image + '\'' +
+                ", price='" + price + '\'' +
+                ", currency='" + currency + '\'' +
                 ", category=" + category +
                 '}';
     }
@@ -87,6 +110,8 @@ public class Product implements Serializable {
         this.name = builder.name;
         this.description = builder.description;
         this.image = builder.image;
+        this.price = builder.price;
+        this.currency = builder.currency;
         this.category = builder.category;
     }
 
@@ -99,6 +124,8 @@ public class Product implements Serializable {
         private String name;
         private String description;
         private String image;
+        private BigDecimal price;
+        private String currency;
         private Category category;
 
         public Builder setId(Long id) {
@@ -118,6 +145,16 @@ public class Product implements Serializable {
 
         public Builder setImage(String image) {
             this.image = image;
+            return this;
+        }
+
+        public Builder setPrice(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder setCurrency(String currency) {
+            this.currency = currency;
             return this;
         }
 

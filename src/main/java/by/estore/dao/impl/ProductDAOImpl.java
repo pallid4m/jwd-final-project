@@ -21,18 +21,36 @@ public class ProductDAOImpl implements ProductDAO {
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private static final String GET_ALL_PRODUCTS_QUERY = "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`image`, p.`category_id`, c.`name` AS `category_name` FROM `products` AS p JOIN `categories` AS c ON p.`category_id` = c.`id`;";
-    private static final String GET_PRODUCTS_BY_CATEGORY_QUERY = "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`image`, p.`category_id` FROM `products` AS p JOIN `categories` AS c ON p.`category_id` = c.`id` WHERE c.`name` = ?;";
-    private static final String GET_PRODUCTS_BY_CATEGORY_LIMIT_OFFSET_QUERY = "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`image`, p.`category_id` FROM `products` AS p JOIN `categories` AS c ON p.`category_id` = c.`id` WHERE c.`name` = ? LIMIT ? OFFSET ?;";
-    private static final String GET_PRODUCT_BY_ID = "SELECT p.`name` AS `product_name`, p.`description`, p.`image`, p.`category_id`, c.`name` AS `category_name` FROM `products` AS p JOIN `categories` AS c ON p.`category_id` = c.`id` WHERE p.`id` = ?;";
+    private static final String GET_ALL_PRODUCTS_QUERY =
+            "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`price`, p.`currency`, p.`image`, p.`category_id`, c.`name` AS `category_name` FROM `products` AS p " +
+            "JOIN `categories` AS c ON p.`category_id` = c.`id`;";
 
-    private static final String GET_PRODUCTS_BY_ORDER = "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`image` FROM `products` AS p JOIN `order_details` AS od ON od.`order_id` = ? AND od.`product_id` = p.`id`;";
+    private static final String GET_PRODUCTS_BY_CATEGORY_QUERY =
+            "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`price`, p.`currency`, p.`image`, p.`category_id` FROM `products` AS p " +
+            "JOIN `categories` AS c ON p.`category_id` = c.`id` " +
+            "WHERE c.`name` = ?;";
+
+    private static final String GET_PRODUCTS_BY_CATEGORY_LIMIT_OFFSET_QUERY =
+            "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`price`, p.`currency`, p.`image`, p.`category_id` FROM `products` AS p " +
+            "JOIN `categories` AS c ON p.`category_id` = c.`id` " +
+            "WHERE c.`name` = ? LIMIT ? OFFSET ?;";
+
+    private static final String GET_PRODUCT_BY_ID =
+            "SELECT p.`name` AS `product_name`, p.`description`, p.`price`, p.`currency`, p.`image`, p.`category_id`, c.`name` AS `category_name` FROM `products` AS p " +
+            "JOIN `categories` AS c ON p.`category_id` = c.`id` " +
+            "WHERE p.`id` = ?;";
+
+    private static final String GET_PRODUCTS_BY_ORDER =
+            "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`price`, p.`currency`, p.`image`, c.`id`, c.`name` AS `category_name` FROM `products` AS p " +
+            "JOIN `order_details` AS od ON od.`order_id` = ? AND od.`product_id` = p.`id` " +
+            "JOIN `categories` AS c ON p.`category_id` = c.`id`;";
 
     private static final String PRODUCT_ID = "id";
     private static final String PRODUCT_NAME = "product_name";
     private static final String PRODUCT_DESCRIPTION = "description";
-    private static final String PRODUCT_IMAGE = "image";
     private static final String PRODUCT_PRICE = "price";
+    private static final String PRODUCT_CURRENCY = "currency";
+    private static final String PRODUCT_IMAGE = "image";
     private static final String CATEGORY_ID = "id";
     private static final String CATEGORY_NAME = "category_name";
 
@@ -61,6 +79,8 @@ public class ProductDAOImpl implements ProductDAO {
                         .setId(resultSet.getLong(PRODUCT_ID))
                         .setName(resultSet.getString(PRODUCT_NAME))
                         .setDescription(resultSet.getString(PRODUCT_DESCRIPTION))
+                        .setPrice(resultSet.getBigDecimal(PRODUCT_PRICE))
+                        .setCurrency(resultSet.getString(PRODUCT_CURRENCY))
                         .setImage(resultSet.getString(PRODUCT_IMAGE))
                         .setCategory(category)
                         .build();
@@ -109,6 +129,8 @@ public class ProductDAOImpl implements ProductDAO {
                         .setId(resultSet.getLong(PRODUCT_ID))
                         .setName(resultSet.getString(PRODUCT_NAME))
                         .setDescription(resultSet.getString(PRODUCT_DESCRIPTION))
+                        .setPrice(resultSet.getBigDecimal(PRODUCT_PRICE))
+                        .setCurrency(resultSet.getString(PRODUCT_CURRENCY))
                         .setImage(resultSet.getString(PRODUCT_IMAGE))
                         .setCategory(category)
                         .build();
@@ -160,6 +182,8 @@ public class ProductDAOImpl implements ProductDAO {
                         .setId(resultSet.getLong(PRODUCT_ID))
                         .setName(resultSet.getString(PRODUCT_NAME))
                         .setDescription(resultSet.getString(PRODUCT_DESCRIPTION))
+                        .setPrice(resultSet.getBigDecimal(PRODUCT_PRICE))
+                        .setCurrency(resultSet.getString(PRODUCT_CURRENCY))
                         .setImage(resultSet.getString(PRODUCT_IMAGE))
                         .setCategory(category)
                         .build();
@@ -203,11 +227,18 @@ public class ProductDAOImpl implements ProductDAO {
 
             while (resultSet.next()) {
 
+                Category category = new Category();
+                category.setId(resultSet.getShort(CATEGORY_ID));
+                category.setName(resultSet.getString(CATEGORY_NAME));
+
                 Product product = Product.builder()
                         .setId(resultSet.getLong(PRODUCT_ID))
                         .setName(resultSet.getString(PRODUCT_NAME))
                         .setDescription(resultSet.getString(PRODUCT_DESCRIPTION))
+                        .setPrice(resultSet.getBigDecimal(PRODUCT_PRICE))
+                        .setCurrency(resultSet.getString(PRODUCT_CURRENCY))
                         .setImage(resultSet.getString(PRODUCT_IMAGE))
+                        .setCategory(category)
                         .build();
 
                 products.add(product);
@@ -256,6 +287,8 @@ public class ProductDAOImpl implements ProductDAO {
                         .setId(id)
                         .setName(resultSet.getString(PRODUCT_NAME))
                         .setDescription(resultSet.getString(PRODUCT_DESCRIPTION))
+                        .setPrice(resultSet.getBigDecimal(PRODUCT_PRICE))
+                        .setCurrency(resultSet.getString(PRODUCT_CURRENCY))
                         .setImage(resultSet.getString(PRODUCT_IMAGE))
                         .setCategory(category)
                         .build();
