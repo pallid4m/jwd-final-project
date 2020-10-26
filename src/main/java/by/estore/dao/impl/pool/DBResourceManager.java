@@ -1,4 +1,4 @@
-package by.estore.dao.impl;
+package by.estore.dao.impl.pool;
 
 import java.util.ResourceBundle;
 

@@ -1,6 +1,7 @@
-package by.estore.controller.validation;
+package by.estore.controller.validation.impl;
 
 import by.estore.bean.User;
+import by.estore.controller.validation.Validator;
 
 public class UserValidator implements Validator<User> {
 

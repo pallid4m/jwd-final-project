@@ -30,34 +30,34 @@ public class AuthenticationFilter extends HttpFilter {
     private static final String CSRF_TOKEN_SAMPLE = "csrf_sample";
 
     @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = req.getSession();
+    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpSession session = request.getSession();
 
         if (session.getAttribute(CSRF_TOKEN) == null) {
             session.setAttribute(CSRF_TOKEN, CSRF_TOKEN_SAMPLE);
         }
 
-        if (req.getMethod().equalsIgnoreCase(POST_METHOD)) {
-            if (!Objects.equals(req.getParameter(CSRF_TOKEN), session.getAttribute(CSRF_TOKEN))) {
+        if (request.getMethod().equalsIgnoreCase(POST_METHOD)) {
+            if (!Objects.equals(request.getParameter(CSRF_TOKEN), session.getAttribute(CSRF_TOKEN))) {
                 session.invalidate();
-                res.sendRedirect(req.getContextPath() + RouteHolder.SIGN_IN_PAGE);
+                response.sendRedirect(request.getContextPath() + RouteHolder.SIGN_IN_PAGE);
                 return;
             }
         }
 
-        String command = req.getParameter(COMMAND_PARAM);
+        String command = request.getParameter(COMMAND_PARAM);
         if (command.equals(CommandName.CART_PAGE) || command.equals(CommandName.USER_PAGE) || command.equals(CommandName.ADMIN_PAGE)) {
             if (session.getAttribute("user") == null) {
-                res.sendRedirect(req.getContextPath() + RouteHolder.SIGN_IN_PAGE);
+                response.sendRedirect(request.getContextPath() + RouteHolder.SIGN_IN_PAGE);
                 return;
             }
         }
 
-        super.doFilter(req, res, chain);
+        super.doFilter(request, response, chain);
     }
 
-    private Cookie getCookie(HttpServletRequest req, String name) {
-        Cookie[] cookies = req.getCookies();
+    private Cookie getCookie(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
 
         for (Cookie value : cookies) {
             if (value.getName().equals(name)) {

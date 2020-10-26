@@ -16,8 +16,8 @@ public class ResourceFilter extends HttpFilter {
     private static final Logger logger = LogManager.getLogger(ResourceFilter.class);
 
     @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-//        logger.debug(req.getRequestURL());
-        super.doFilter(req, res, chain);
+    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+//        logger.debug(request.getRequestURL());
+        super.doFilter(request, response, chain);
     }
 }

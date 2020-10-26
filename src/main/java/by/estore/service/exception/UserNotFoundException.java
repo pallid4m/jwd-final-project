@@ -1,20 +1,15 @@
 package by.estore.service.exception;
 
-public class UserNotFoundException extends Exception {
+public class UserNotFoundException extends RuntimeException {
 
-    public UserNotFoundException() {
-        super();
-    }
+    private String message;
 
     public UserNotFoundException(String message) {
-        super(message);
+        this.message = message;
     }
 
-    public UserNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UserNotFoundException(Throwable cause) {
-        super(cause);
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

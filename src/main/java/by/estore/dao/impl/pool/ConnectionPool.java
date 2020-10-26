@@ -1,4 +1,4 @@
-package by.estore.dao.impl;
+package by.estore.dao.impl.pool;
 
 import by.estore.dao.exception.ConnectionPoolException;
 import org.apache.logging.log4j.LogManager;

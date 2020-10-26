@@ -12,5 +12,6 @@ public interface ProductDAO {
     List<Product> getProductsByCategory(Category category) throws DAOException;
     List<Product> getProductsByCategory(Category category, int limit, int offset) throws DAOException;
     List<Product> getProductsByOrder(Order order) throws DAOException;
+    long getProductCount() throws DAOException;
     Product getProductById(Long id) throws DAOException;
 }

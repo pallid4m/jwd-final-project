@@ -6,6 +6,7 @@ import by.estore.bean.User;
 import by.estore.dao.UserDAO;
 import by.estore.dao.exception.ConnectionPoolException;
 import by.estore.dao.exception.DAOException;
+import by.estore.dao.impl.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,10 +15,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class UserDAOImpl implements UserDAO {
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
@@ -44,8 +44,8 @@ public class UserDAOImpl implements UserDAO {
             "SELECT u.`id`, u.`email`, u.`password`, u.`role_id`, r.`name` FROM `users` AS u " +
             "JOIN `roles` AS r ON u.`role_id` = r.`id`;";
 
-    private static final String GET_ALL_ORDERS_QUERY =
-            "SELECT `id`, `created`, `status` FROM `orders` WHERE `user_id` = ?;";
+    private static final String GET_ALL_ORDERS_BY_USER_ID_LAZY_QUERY =
+            "SELECT `id`, `create_date`, `status` FROM `orders` WHERE `user_id` = ?;";
 
     private static final String USER_ID = "id";
     private static final String USER_EMAIL = "email";
@@ -54,7 +54,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String ROLE_NAME = "name";
 
     private static final String ORDER_ID = "id";
-    private static final String ORDER_DATE = "created";
+    private static final String ORDER_CREATE_DATE = "create_date";
     private static final String ORDER_STATUS = "status";
 
     @Override
@@ -279,15 +279,15 @@ public class UserDAOImpl implements UserDAO {
             connection = connectionPool.takeConnection();
             connection.setAutoCommit(false);
 
-            preparedStatement = connection.prepareStatement(GET_ALL_ORDERS_QUERY);
+            preparedStatement = connection.prepareStatement(GET_ALL_ORDERS_BY_USER_ID_LAZY_QUERY);
             preparedStatement.setLong(1, user.getId());
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Order order = new Order();
                 order.setId(resultSet.getLong(ORDER_ID));
-                order.setOrderDate(resultSet.getTimestamp(ORDER_DATE));
-                order.setOrderStatus(resultSet.getString(ORDER_STATUS));
+                order.setCreateDate(resultSet.getObject(ORDER_CREATE_DATE, LocalDateTime.class));
+                order.setStatus(resultSet.getString(ORDER_STATUS));
                 orders.add(order);
             }
 

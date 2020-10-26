@@ -6,11 +6,11 @@ import java.util.Objects;
 public class Pagination implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int currentPage = 1;
-    private int nextPage = 2;
-    private int prevPage = 0;
+    private int currentPage;
+    private int nextPage;
+    private int prevPage;
+    private int firstPage = 1;
     private int lastPage;
-    private int countPage;
 
     public Pagination() {}
 
@@ -38,20 +38,20 @@ public class Pagination implements Serializable {
         this.prevPage = prevPage;
     }
 
+    public int getFirstPage() {
+        return firstPage;
+    }
+
+    public void setFirstPage(int firstPage) {
+        this.firstPage = firstPage;
+    }
+
     public int getLastPage() {
         return lastPage;
     }
 
     public void setLastPage(int lastPage) {
         this.lastPage = lastPage;
-    }
-
-    public int getcountPage() {
-        return countPage;
-    }
-
-    public void setcountPage(int countPage) {
-        this.countPage = countPage;
     }
 
     @Override
@@ -62,13 +62,13 @@ public class Pagination implements Serializable {
         return currentPage == that.currentPage &&
                 nextPage == that.nextPage &&
                 prevPage == that.prevPage &&
-                lastPage == that.lastPage &&
-                countPage == that.countPage;
+                firstPage == that.firstPage &&
+                lastPage == that.lastPage;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(currentPage, nextPage, prevPage, lastPage, countPage);
+        return Objects.hash(currentPage, nextPage, prevPage, firstPage, lastPage);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class Pagination implements Serializable {
                 "currentPage=" + currentPage +
                 ", nextPage=" + nextPage +
                 ", prevPage=" + prevPage +
+                ", firstPage=" + firstPage +
                 ", lastPage=" + lastPage +
-                ", countPage=" + countPage +
                 '}';
     }
 }

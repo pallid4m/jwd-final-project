@@ -18,34 +18,34 @@ public class LoggingFilter extends HttpFilter {
     private static final Logger logger = LogManager.getLogger(LoggingFilter.class);
 
     @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-//        logAllInfo(req, res);
-        chain.doFilter(req, res);
+    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+//        logAllInfo(request, response);
+        chain.doFilter(request, response);
     }
 
-    private void logAllInfo(HttpServletRequest req, HttpServletResponse res) {
+    private void logAllInfo(HttpServletRequest request, HttpServletResponse response) {
 
-        String params = Collections.list(req.getParameterNames()).stream()
-                .map(param -> "\t" + param + ": " + Arrays.toString(req.getParameterValues(param)))
+        String params = Collections.list(request.getParameterNames()).stream()
+                .map(param -> "\t" + param + ": " + Arrays.toString(request.getParameterValues(param)))
                 .collect(Collectors.joining("\n"));
         logger.debug("params\n{}", params);
 
-        String headers = Collections.list(req.getHeaderNames()).stream()
-                .map(header -> "\t" + header + ": " + req.getHeader(header))
+        String headers = Collections.list(request.getHeaderNames()).stream()
+                .map(header -> "\t" + header + ": " + request.getHeader(header))
                 .collect(Collectors.joining("\n"));
         logger.debug("headers\n{}", headers);
 
-        if (req.getSession() != null) {
-            String session = Collections.list(req.getSession().getAttributeNames()).stream()
-                    .map(attribute -> "\t" + attribute + ": " + req.getSession().getAttribute(attribute))
+        if (request.getSession(false) != null) {
+            String session = Collections.list(request.getSession().getAttributeNames()).stream()
+                    .map(attribute -> "\t" + attribute + ": " + request.getSession().getAttribute(attribute))
                     .collect(Collectors.joining("\n"));
             logger.debug("session\n{}", session);
         } else {
             logger.debug("session\n{}", "null");
         }
 
-        if (req.getCookies() != null) {
-            String cookies = Stream.of(req.getCookies())
+        if (request.getCookies() != null) {
+            String cookies = Stream.of(request.getCookies())
                     .map(cookie -> "\t" + cookie.getName() + ": " + cookie.getValue())
                     .collect(Collectors.joining("\n"));
             logger.debug("cookies\n{}", cookies);

@@ -1,20 +1,15 @@
 package by.estore.service.exception;
 
-public class AuthorizationException extends Exception {
+public class AuthorizationException extends RuntimeException {
 
-    public AuthorizationException() {
-        super();
-    }
+    private String message;
 
     public AuthorizationException(String message) {
-        super(message);
+        this.message = message;
     }
 
-    public AuthorizationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public AuthorizationException(Throwable cause) {
-        super(cause);
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

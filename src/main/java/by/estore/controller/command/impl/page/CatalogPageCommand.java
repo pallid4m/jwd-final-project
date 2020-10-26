@@ -24,42 +24,56 @@ public class CatalogPageCommand implements Command {
     private final int ITEMS_COUNT = 5;
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String categoryName = req.getParameter(CATEGORY_PARAM);
-        String pageNumber = req.getParameter(PAGE_PARAM);
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String categoryName = request.getParameter(CATEGORY_PARAM);
+        String pageNumber = request.getParameter(PAGE_PARAM);
 
-        if (categoryName != null) {
+        if (request.getSession().getAttribute("products") != null) {
+            request.getSession().removeAttribute("products");
+        }
+
+        if (categoryName != null && pageNumber != null) {
             Category category = new Category();
             category.setName(categoryName);
+            Pagination pagination = new Pagination();
 
-            Pagination pagination;
-            int offset = 0;
-            if (pageNumber == null) {
-                pagination = new Pagination();
-            } else {
-                pagination = (Pagination) req.getSession().getAttribute("pagination");
-                pagination.setCurrentPage((Integer.parseInt(pageNumber)));
-                offset = (Integer.parseInt(pageNumber) - 1) * ITEMS_COUNT;
+            int currentPage;
+            try {
+                currentPage = Integer.parseInt(pageNumber);
+            } catch (NumberFormatException e) {
+                currentPage = 1;
             }
 
-            List<Product> products = null;
+            int offset = (currentPage - 1) * ITEMS_COUNT;
+
+            List<Product> products;
+            long productCount;
             try {
                 products = ServiceFactory.getInstance().getProductService().getProductsByCategory(category, ITEMS_COUNT, offset);
+                productCount = ServiceFactory.getInstance().getProductService().getProductCount();
             } catch (ServiceException e) {
                 logger.error(e);
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
                 return;
             }
 
-            if (products == null) {
-                // TODO: 10-Oct-20
+            if (products != null) {
+                int prevPage = currentPage - 1;
+                int nextPage = currentPage + 1;
+                int lastPage = (int)(productCount / ITEMS_COUNT);
+
+                pagination.setCurrentPage(currentPage);
+                pagination.setPrevPage(prevPage);
+                pagination.setNextPage(nextPage);
+                pagination.setLastPage(lastPage);
+
+                request.getSession().setAttribute("products", products);
+                request.getSession().setAttribute("pagination", pagination);
             }
 
-            req.getSession().setAttribute("category", category);
-            req.getSession().setAttribute("products", products);
-            req.getSession().setAttribute("pagination", pagination);
+            request.getSession().setAttribute("category", category);
         }
 
-        req.getRequestDispatcher("/WEB-INF/jsp/catalogPage.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/catalogPage.jsp").forward(request, response);
     }
 }

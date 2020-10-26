@@ -1,8 +1,11 @@
 package by.estore.controller.command.impl.page;
 
+import by.estore.bean.Order;
 import by.estore.bean.Product;
 import by.estore.bean.User;
 import by.estore.controller.command.Command;
+import by.estore.controller.command.CommandName;
+import by.estore.controller.command.RouteHolder;
 import by.estore.service.ServiceFactory;
 import by.estore.service.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
@@ -13,33 +16,57 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdminPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AdminPageCommand.class);
 
+    private static final String VIEW_PARAM = "view";
+
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> users = new ArrayList<>();
-        List<Product> products = new ArrayList<>();
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        try {
-            users = ServiceFactory.getInstance().getUserService().getAllUsers();
-            products = ServiceFactory.getInstance().getProductService().getAllProducts();
-        } catch (ServiceException e) {
-            logger.error(e);
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
-            return;
+        String view = request.getParameter(VIEW_PARAM);
+
+        HttpSession session = request.getSession();
+
+        if (view != null) {
+            if (view.equals(CommandName.USER_LIST)) {
+                List<User> users;
+                try {
+                    users = ServiceFactory.getInstance().getUserService().getAllUsers();
+                } catch (ServiceException e) {
+                    logger.error(e);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                    return;
+                }
+                session.setAttribute("users", users);
+                session.setAttribute("content", RouteHolder.USER_LIST);
+            } else if (view.equals(CommandName.PRODUCT_LIST)) {
+                List<Product> products;
+                try {
+                    products = ServiceFactory.getInstance().getProductService().getAllProducts();
+                } catch (ServiceException e) {
+                    logger.error(e);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                    return;
+                }
+                session.setAttribute("products", products);
+                session.setAttribute("content", RouteHolder.PRODUCT_LIST);
+            } else if (view.equals(CommandName.ORDER_LIST)) {
+                List<Order> orders;
+                try {
+                    orders = ServiceFactory.getInstance().getOrderService().getAllOrders();
+                } catch (ServiceException e) {
+                    logger.error(e);
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                    return;
+                }
+                session.setAttribute("orders", orders);
+                session.setAttribute("content", RouteHolder.ORDER_LIST);
+            }
         }
 
-        HttpSession session = req.getSession(false);
-
-        if (session != null) {
-            session.setAttribute("users", users);
-            session.setAttribute("products", products);
-        }
-
-        req.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp").forward(request, response);
     }
 }

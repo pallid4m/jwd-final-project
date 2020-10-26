@@ -21,69 +21,16 @@
         <div class="row">
             <div class="col-md-2">
                 <nav class="nav flex-column">
-                    <a class="nav-link active" href="#">User list</a>
-                    <a class="nav-link" href="#">Product list</a>
+                    <a class="nav-link active" href="main?command=admin-page&view=user-list">User list</a>
+                    <a class="nav-link" href="main?command=admin-page&view=product-list">Product list</a>
+                    <a class="nav-link" href="main?command=admin-page&view=order-list">Order list</a>
                     <a class="nav-link" href="#">Settings</a>
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </nav>
             </div>
-            <div class="col-md-10">
-                <button class="btn btn btn-light" type="button" data-toggle="collapse" data-target="#collapseUserForm" aria-expanded="false" aria-controls="collapseUserForm">
-                    Add user
-                </button>
-                <div class="collapse" id="collapseUserForm">
-                    <div class="card card-body">
-                        <form>
-                            <div class="row">
-                                <div class="form-group col">
-                                    <label class="sr-only" for="inputEmail">Email</label>
-                                    <input type="text" class="form-control" id="inputEmail" placeholder="Email">
-                                </div>
-                                <div class="form-group col">
-                                    <label class="sr-only" for="inputPassword">Password</label>
-                                    <input type="text" class="form-control" id="inputPassword" placeholder="Password">
-                                </div>
-                                <div class="form-group col">
-                                    <label class="sr-only" for="selectRole">Role</label>
-                                    <select class="form-control" id="selectRole">
-                                        <option value="">Select role...</option>
-                                        <option>admin</option>
-                                        <option>user</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-secondary">add</button>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-sm table-borderless">
-                    <caption>List of users</caption>
-                    <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="user" items="${sessionScope.users}">
-                        <tr>
-                            <th scope="row">${user.id}</th>
-                            <td>${user.email}</td>
-                            <td>${user.password}</td>
-                            <td>${user.role.name}</td>
-                            <td>
-                                <a href="#">View</a>
-                                <a href="#">Edit</a>
-                                <a href="#">Delete</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
+            <c:if test="${!empty content}">
+                <jsp:include page="${content}"/>
+            </c:if>
         </div>
     </div>
     </div>

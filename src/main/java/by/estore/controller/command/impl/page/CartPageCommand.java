@@ -19,8 +19,8 @@ public class CartPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(CartPageCommand.class);
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
         if (session != null) {
             User user = (User) session.getAttribute("user");
             try {
@@ -28,10 +28,10 @@ public class CartPageCommand implements Command {
                 session.setAttribute("orders", orders);
             } catch (ServiceException e) {
                 logger.error(e);
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
                 return;
             }
         }
-        req.getRequestDispatcher("/WEB-INF/jsp/cartPage.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/cartPage.jsp").forward(request, response);
     }
 }

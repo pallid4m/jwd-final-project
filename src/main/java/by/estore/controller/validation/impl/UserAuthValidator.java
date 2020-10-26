@@ -1,6 +1,7 @@
-package by.estore.controller.validation;
+package by.estore.controller.validation.impl;
 
 import by.estore.controller.dto.UserAuth;
+import by.estore.controller.validation.Validator;
 
 public class UserAuthValidator implements Validator<UserAuth> {
 

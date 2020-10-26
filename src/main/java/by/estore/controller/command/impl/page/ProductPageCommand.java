@@ -19,10 +19,10 @@ public class ProductPageCommand implements Command {
     private final String PRODUCT_ID_PARAM = "id";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         long productId;
         try {
-            productId = Long.parseLong(req.getParameter(PRODUCT_ID_PARAM));
+            productId = Long.parseLong(request.getParameter(PRODUCT_ID_PARAM));
         } catch (NumberFormatException e) {
             logger.warn(e);
             throw e;
@@ -33,15 +33,15 @@ public class ProductPageCommand implements Command {
             product = ServiceFactory.getInstance().getProductService().getProductById(productId);
         } catch (ServiceException e) {
             logger.error(e);
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "pff");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
             return;
         }
 
         if (product != null) {
-            HttpSession session = req.getSession();
+            HttpSession session = request.getSession();
             session.setAttribute("product", product);
         }
 
-        req.getRequestDispatcher("/WEB-INF/jsp/productPage.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/productPage.jsp").forward(request, response);
     }
 }

@@ -40,6 +40,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public long getProductCount() throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getProductDAO().getProductCount();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Product getProductById(Long id) throws ServiceException {
         try {
             return DAOFactory.getInstance().getProductDAO().getProductById(id);

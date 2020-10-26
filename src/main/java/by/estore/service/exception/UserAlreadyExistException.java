@@ -1,20 +1,15 @@
 package by.estore.service.exception;
 
-public class UserAlreadyExistException extends Exception {
+public class UserAlreadyExistException extends RuntimeException {
 
-    public UserAlreadyExistException() {
-        super();
-    }
+    private String message;
 
     public UserAlreadyExistException(String message) {
-        super(message);
+        this.message = message;
     }
 
-    public UserAlreadyExistException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UserAlreadyExistException(Throwable cause) {
-        super(cause);
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

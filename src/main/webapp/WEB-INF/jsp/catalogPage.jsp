@@ -22,8 +22,8 @@
         <div class="row">
             <div class="col-md-2">
                 <nav class="nav flex-column">
-                    <a class="nav-link active" href="<c:url value="main?command=catalog-page&category=phone"/>"><fmt:message key="catalog.phones"/></a>
-                    <a class="nav-link" href="<c:url value="main?command=catalog-page&category=laptop"/>"><fmt:message key="catalog.laptops"/></a>
+                    <a class="nav-link active" href="<c:url value="main?command=catalog-page&category=phone&page=1"/>"><fmt:message key="catalog.phones"/></a>
+                    <a class="nav-link" href="<c:url value="main?command=catalog-page&category=laptop&page=1"/>"><fmt:message key="catalog.laptops"/></a>
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </nav>
             </div>
@@ -58,14 +58,14 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end">
                             <c:choose>
-                                <c:when test="${pagination.currentPage == 1}">
+                                <c:when test="${pagination.prevPage < pagination.firstPage}">
                                     <li class="page-item disabled">
-                                        <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.currentPage - 1}" tabindex="-1" aria-disabled="true">Previous</a>
+                                        <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.prevPage}" tabindex="-1" aria-disabled="true">Previous</a>
                                     </li>
                                 </c:when>
                                 <c:otherwise>
                                     <li class="page-item">
-                                        <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.currentPage - 1}">Previous</a>
+                                        <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.prevPage}">Previous</a>
                                     </li>
                                 </c:otherwise>
                             </c:choose>
@@ -77,9 +77,18 @@
                                 </span>
                             </li>
 <%--                            <li class="page-item"><a class="page-link" href="#">3</a></li>--%>
-                            <li class="page-item">
-                                <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.currentPage + 1}">Next</a>
-                            </li>
+                            <c:choose>
+                                <c:when test="${pagination.nextPage > pagination.lastPage}">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.nextPage}" tabindex="-1" aria-disabled="true">Next</a>
+                                    </li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li class="page-item">
+                                        <a class="page-link" href="main?command=catalog-page&category=${category.name}&page=${pagination.nextPage}">Next</a>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
                         </ul>
                     </nav>
                 </c:if>

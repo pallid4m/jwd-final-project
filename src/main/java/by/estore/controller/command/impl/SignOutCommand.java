@@ -15,13 +15,13 @@ public class SignOutCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignOutCommand.class);
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
 
         if (session != null) {
             session.invalidate();
         }
 
-        resp.sendRedirect(req.getContextPath() + RouteHolder.MAIN_PAGE);
+        response.sendRedirect(request.getContextPath() + RouteHolder.MAIN_PAGE);
     }
 }

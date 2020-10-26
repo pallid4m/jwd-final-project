@@ -13,8 +13,8 @@ public class MainPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(MainPageCommand.class);
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO: 12-Oct-20 low cost products
-        req.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/mainPage.jsp").forward(request, response);
     }
 }

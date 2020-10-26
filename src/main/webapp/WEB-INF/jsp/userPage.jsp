@@ -17,11 +17,32 @@
 
     <jsp:include page="header.jsp"/>
 
-    <c:if test="${!empty sessionScope.user}">
-        <p>id: <c:out value="${sessionScope.user.id}"/></p>
-        <p>email: <c:out value="${sessionScope.user.email}"/></p>
-        <p>password: <c:out value="${sessionScope.user.password}"/></p>
-    </c:if>
+    <div class="container">
+
+
+        <form action="main?command=edit-user" method="post">
+            <div class="form-group">
+                <label class="sr-only" for="inputEmail"><fmt:message key="form.email"/></label>
+                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="${sessionScope.user.email}" required="" autofocus=""/>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="inputPassword"><fmt:message key="form.password"/></label>
+                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="form.password"/>" required=""/>
+            </div>
+            <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </form>
+
+
+
+
+
+        <c:if test="${!empty sessionScope.user}">
+            <p>id: <c:out value="${sessionScope.user.id}"/></p>
+            <p>email: <c:out value="${sessionScope.user.email}"/></p>
+            <p>password: <c:out value="${sessionScope.user.password}"/></p>
+        </c:if>
+    </div>
 
     <jsp:include page="footer.jsp"/>
 
