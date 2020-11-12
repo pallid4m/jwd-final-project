@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="igor">
+        <sql>
+            CREATE TABLE `users` (
+                    `id` INT NOT NULL AUTO_INCREMENT,
+                    `email` VARCHAR(32) NOT NULL,
+                    `password` VARCHAR(70) NOT NULL,
+                    `phone` VARCHAR(15) NOT NULL,
+                    `create_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    `first_name` VARCHAR(15) NULL DEFAULT NULL,
+                    `last_name` VARCHAR(15) NULL DEFAULT NULL,
+                    `image` VARCHAR(32) NULL DEFAULT NULL,
+                    `role_id` TINYINT NOT NULL,
+                UNIQUE KEY (`email`),
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="igor">
+        <sql>
+            CREATE TABLE `roles` (
+                    `id` TINYINT NOT NULL AUTO_INCREMENT,
+                    `name` VARCHAR(10) NOT NULL,
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="3" author="igor">
+        <sql>
+            ALTER TABLE `users` ADD CONSTRAINT `fk_users_roles_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+        </sql>
+    </changeSet>
+
+    <changeSet id="4" author="igor">
+        <sql>
+            CREATE TABLE `users_black_list` (
+                    `id` INT NOT NULL AUTO_INCREMENT,
+                    `description` VARCHAR(45) NOT NULL,
+                    `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    `user_id` INT NOT NULL,
+                CONSTRAINT `fk_users_black_list_users_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="5" author="igor">
+        <sql>
+            CREATE TABLE `products` (
+                    `id` INT NOT NULL AUTO_INCREMENT,
+                    `name` VARCHAR(100) NOT NULL,
+                    `description` VARCHAR(350) NOT NULL,
+                    `price` DECIMAL(12,2) NOT NULL,
+                    `image` VARCHAR(32) NULL DEFAULT NULL,
+                    `category_id` SMALLINT NOT NULL,
+                    `currency_id` SMALLINT NOT NULL,
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="6" author="igor">
+        <sql>
+            CREATE TABLE `categories` (
+                    `id` SMALLINT NOT NULL AUTO_INCREMENT,
+                    `name` VARCHAR(32) NOT NULL,
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="7" author="igor">
+        <sql>
+            CREATE TABLE `currencies` (
+                    `id` SMALLINT NOT NULL AUTO_INCREMENT,
+                    `code` VARCHAR(3) NOT NULL,
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="8" author="igor">
+        <sql>
+            CREATE TABLE `order_status` (
+                    `id` TINYINT NOT NULL AUTO_INCREMENT,
+                    `state` VARCHAR(20) NOT NULL,
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="9" author="igor">
+        <sql>
+            ALTER TABLE `products` ADD CONSTRAINT `fk_products_categories_id` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
+            ALTER TABLE `products` ADD CONSTRAINT `fk_products_currencies_id` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`);
+        </sql>
+    </changeSet>
+
+    <changeSet id="10" author="igor">
+        <sql>
+            CREATE TABLE `orders` (
+                    `id` INT NOT NULL AUTO_INCREMENT,
+                    `create_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    `amount` DECIMAL(12,2) NOT NULL,
+                    `user_id` INT NOT NULL,
+                    `order_status_id` TINYINT NOT NULL,
+                    `currency_id` SMALLINT NOT NULL,
+                CONSTRAINT `fk_orders_users_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+                CONSTRAINT `fk_orders_order_status_id` FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`id`),
+                CONSTRAINT `fk_orders_currencies_id` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`),
+                PRIMARY KEY (`id`)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="11" author="igor">
+        <sql>
+            CREATE TABLE `order_details` (
+                    `order_id` INT NOT NULL,
+                    `product_id` INT NOT NULL,
+                    `quantity` INT NOT NULL,
+                CONSTRAINT `fk_orders_products_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+                CONSTRAINT `fk_orders_products_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+                PRIMARY KEY (`order_id`, `product_id`)
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

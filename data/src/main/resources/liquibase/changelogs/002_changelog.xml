@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="igor">
+        <sql>
+            INSERT INTO `roles` (`name`) VALUES ('Admin'), ('User');
+            INSERT INTO `categories` (`name`) VALUES ('phone'), ('laptop'), ('tablet');
+            INSERT INTO `currencies` (`code`) VALUES ('BYN'), ('RUB'), ('USD'), ('EUR'), ('CNY');
+            INSERT INTO `order_status` (`state`) VALUES ('Processing'), ('Canceled'), ('Completed'), ('Failed'), ('On Hold'), ('Pending Payment'), ('Refunded');
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="igor">
+        <sql>
+<!--     password: password1       -->
+            INSERT INTO `users` (`email`, `password`, `phone`, `role_id`) VALUES
+                ('email1@gmail.com', '$2a$10$F0.082aq4NRQqkFnX3ipAu/elkIrBLZ3XPc091yz0/aAVhUumvjgG', '+375291112233', 1);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
