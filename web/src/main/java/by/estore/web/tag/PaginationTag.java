@@ -10,7 +10,7 @@ public class PaginationTag extends SimpleTagSupport {
     private int offset;
     private int count;
     private int max = 10;
-    private int steps = 10;
+    private int steps = 5;
     private String previous = "Previous";
     private String next = "Next";
 
@@ -25,26 +25,26 @@ public class PaginationTag extends SimpleTagSupport {
 
         try {
             out.write("<nav>");
-            out.write("<ul class=\"pagination\">");
+            out.write("<ul class=\"pagination justify-content-end\">");
 
             if (offset < steps) {
-                out.write(constructLink(1, previous, "disabled", true));
+                out.write(constructLink(1, previous, "page-item disabled", true));
             } else {
-                out.write(constructLink(offset - steps, previous, null, false));
+                out.write(constructLink(offset - steps, previous, "page-item", false));
             }
 
             for (int itr = 0; itr < count; itr += steps) {
                 if (offset == itr) {
-                    out.write(constructLink((itr / 10 + 1) - 1 * steps, String.valueOf(itr / 10 + 1), "active", true));
+                    out.write(constructLink((itr / 5 + 1) - 1 * steps, String.valueOf(itr / 5 + 1), "page-item active", true));
                 } else {
-                    out.write(constructLink(itr / 10 * steps, String.valueOf(itr / 10 + 1), null, false));
+                    out.write(constructLink(itr / 5 * steps, String.valueOf(itr / 5 + 1), "page-item", false));
                 }
             }
 
             if (offset + steps > count) {
-                out.write(constructLink(offset + steps, next, "disabled", true));
+                out.write(constructLink(offset + steps, next, "page-item disabled", true));
             } else {
-                out.write(constructLink(offset + steps, next, null, false));
+                out.write(constructLink(offset + steps, next, "page-item", false));
             }
 
             out.write("</ul>");
@@ -64,9 +64,10 @@ public class PaginationTag extends SimpleTagSupport {
         }
 
         if (disabled) {
-            link.append(">").append("<a href=\"#\">" + text + "</a></li>");
+            link.append(">").append("<a class=\"page-link\" href=\"#\">" + text + "</a></li>");
         } else {
-            link.append(">").append("<a href=\"" + uri + "?offset=" + page + "\">" + text + "</a></li>");
+            page = page / 5 + 1;
+            link.append(">").append("<a class=\"page-link\" href=\"" + uri + "&page=" + page + "\">" + text + "</a></li>");
         }
 
         return link.toString();

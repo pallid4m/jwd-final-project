@@ -63,6 +63,10 @@ public class ProductDAOImpl implements ProductDAO {
     private static final String GET_PRODUCT_COUNT_QUERY =
             "SELECT COUNT(*) AS `product_count` FROM `products`;";
 
+    private static final String GET_PRODUCT_COUNT_BY_CATEGORY_NAME_QUERY =
+            "SELECT COUNT(*) AS `product_count` FROM `products` " +
+            "WHERE `category_id` = (SELECT `id` FROM `categories` WHERE `name` = ?);";
+
     private static final String ADD_PRODUCT_BY_CATEGORY_NAME_AND_CURRENCY_CODE_QUERY =
             "INSERT INTO `products` (`name`, `description`, `price`, `image`, `category_id`, `currency_id`) " +
             "VALUES (?, ?, ?, ?, (SELECT `id` FROM `categories` WHERE `name` = ?), (SELECT `id` FROM `currencies` WHERE `code` = ?));";
@@ -371,6 +375,44 @@ public class ProductDAOImpl implements ProductDAO {
             connection.setAutoCommit(false);
 
             preparedStatement = connection.prepareStatement(GET_PRODUCT_COUNT_QUERY);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                productCount = resultSet.getLong(PRODUCT_COUNT);
+            }
+
+            connection.commit();
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
+
+        return productCount;
+    }
+
+    @Override
+    public long findProductCountByCategoryName(Category category) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement =  null;
+        ResultSet resultSet = null;
+
+        long productCount = 0;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(GET_PRODUCT_COUNT_BY_CATEGORY_NAME_QUERY);
+            preparedStatement.setString(1, category.getName());
 
             resultSet = preparedStatement.executeQuery();
 

@@ -63,6 +63,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public long findProductCountByCategoryName(Category category) throws ServiceException {
+        try {
+            return productDAO.findProductCountByCategoryName(category);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Product findProductById(Long id) throws ServiceException {
         try {
             return productDAO.findProductById(id);

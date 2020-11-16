@@ -54,62 +54,19 @@
                             </div>
                         </div>
                     </c:forEach>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-end">
-                            <c:url var="prevPageUrl" value="main" >
-                                <c:param name="command" value="catalog-page"/>
-                                <c:param name="category" value="${category.name}"/>
-                                <c:param name="page" value="${pagination.prevPage}"/>
-                            </c:url>
-                            <c:url var="nextPageUrl" value="main" >
-                                <c:param name="command" value="catalog-page"/>
-                                <c:param name="category" value="${category.name}"/>
-                                <c:param name="page" value="${pagination.nextPage}"/>
-                            </c:url>
-                            <c:choose>
-                                <c:when test="${pagination.prevPage < pagination.firstPage}">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="${prevPageUrl}" tabindex="-1" aria-disabled="true"><fmt:message key="pagination.previous"/></a>
-                                    </li>
-                                </c:when>
-                                <c:otherwise>
-                                    <li class="page-item">
-                                        <a class="page-link" href="${prevPageUrl}"><fmt:message key="pagination.previous"/></a>
-                                    </li>
-                                </c:otherwise>
-                            </c:choose>
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">
-                                    ${pagination.currentPage}
-                                    <span class="sr-only">(current)</span>
-                                </span>
-                            </li>
-                            <c:choose>
-                                <c:when test="${pagination.nextPage > pagination.lastPage}">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="${nextPageUrl}" tabindex="-1" aria-disabled="true"><fmt:message key="pagination.next"/></a>
-                                    </li>
-                                </c:when>
-                                <c:otherwise>
-                                    <li class="page-item">
-                                        <a class="page-link" href="${nextPageUrl}"><fmt:message key="pagination.next"/></a>
-                                    </li>
-                                </c:otherwise>
-                            </c:choose>
-                        </ul>
-                    </nav>
-<%--                    <div class="row">--%>
-<%--                        <tag:paginate max="3" offset="${offset}" count="${count}" uri="${uri}" next="&raquo;" previous="&laquo;" />--%>
-<%--                    </div>--%>
-<%--                    <div class="row">--%>
-<%--                        <tag:paginate max="20" offset="1" count="20" uri="main?command=catalog-page" next="&raquo;" previous="&laquo;" />--%>
-<%--                    </div>--%>
+                    <div class="pagination justify-content-end">
+                        <c:url var="paginateUri" value="main">
+                            <c:param name="command" value="catalog-page"/>
+                            <c:param name="category" value="${requestScope.category.name}"/>
+                        </c:url>
+                        <tag:paginate max="3" offset="${requestScope.offset}" count="${requestScope.count}" uri="${paginateUri}" next="&raquo;" previous="&laquo;" />
+                    </div>
                 </c:if>
             </div>
         </div>
     </div>
 
-<%--    <jsp:include page="footer.jsp"/>--%>
+    <jsp:include page="footer.jsp"/>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

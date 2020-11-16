@@ -12,5 +12,6 @@ public interface ProductService {
     List<Product> findProductsByCategory(Category category, int limit, int offset) throws ServiceException;
     List<Product> findLowCostProductsByLimit(int limit) throws ServiceException;
     long findProductCount() throws ServiceException;
+    long findProductCountByCategoryName(Category category) throws ServiceException;
     Product findProductById(Long id) throws ServiceException;
 }

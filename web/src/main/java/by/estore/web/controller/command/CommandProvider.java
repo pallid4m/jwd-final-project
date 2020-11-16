@@ -6,8 +6,7 @@ import by.estore.web.controller.command.impl.SignInCommand;
 import by.estore.web.controller.command.impl.SignOutCommand;
 import by.estore.web.controller.command.impl.SignUpCommand;
 import by.estore.web.controller.command.impl.user.cart.*;
-import by.estore.web.controller.command.impl.user.profile.OrderPageCommand;
-import by.estore.web.controller.command.impl.user.profile.ProfilePageCommand;
+import by.estore.web.controller.command.impl.user.profile.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +43,10 @@ public final class CommandProvider {
         commands.put(CommandName.ADD_PRODUCT, new AddProductCommand());
         commands.put(CommandName.UPDATE_ORDER, new UpdateOrderCommand());
         commands.put(CommandName.SHOW_USER, new ShowUserCommand());
+
+        commands.put(CommandName.CHANGE_EMAIL, new ChangeEmailCommand());
+        commands.put(CommandName.CHANGE_PASSWORD, new ChangePasswordCommand());
+        commands.put(CommandName.CHANGE_PERSONAL_DATA, new ChangePersonalDataCommand());
     }
 
     public Command getCommand(String commandName) {

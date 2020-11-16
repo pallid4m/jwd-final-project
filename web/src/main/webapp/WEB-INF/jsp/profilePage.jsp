@@ -31,7 +31,8 @@
     <div class="profile">
         <div class="pb-5">
             <p class="h5">Change email</p><hr>
-            <form class="col-md-6" action="" method="post">
+            <form class="col-md-6" action="main" method="post">
+                <input type="hidden" name="command" value="change-email">
                 <div class="form-group input-group-sm">
                     <label class="" for="inputEmail">Email</label>
                     <input type="email" name="email" value="${sessionScope.user.email}" id="inputEmail" class="form-control" placeholder="" required="" autofocus=""/>
@@ -42,7 +43,8 @@
         </div>
         <div class="pb-5">
             <p class="h5">Change password</p><hr>
-            <form class="col-md-6" action="" method="post" autocomplete="off">
+            <form class="col-md-6" action="main" method="post" autocomplete="off">
+                <input type="hidden" name="command" value="change-password">
                 <div class="form-group input-group-sm">
                     <label class="" for="inputOldPassword">Old password</label>
                     <input type="password" name="old-password" id="inputOldPassword" class="form-control" placeholder="" required=""/>
@@ -61,7 +63,8 @@
         </div>
         <div class="pb-5">
             <p class="h5">Personal data</p><hr>
-            <form class="col-md-6" action="" method="post">
+            <form class="col-md-6" action="main" method="post">
+                <input type="hidden" name="command" value="change-personal-data">
                 <div class="form-group input-group-sm">
                     <label class="" for="inputPhone">Phone</label>
                     <input type="tel" name="phone" value="${sessionScope.user.phone}" id="inputPhone" class="form-control" placeholder="" required=""/>

@@ -63,6 +63,9 @@ public interface ProductDAO {
      */
     long findProductCount() throws DAOException;
 
+    // TODO: 16-Nov-20 jdoc
+    long findProductCountByCategoryName(Category category) throws DAOException;
+
     /**
      * Search product by its id in database
      * @param id - identifier of product

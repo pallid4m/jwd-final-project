@@ -32,4 +32,8 @@ public final class CommandName {
     public static final String ADD_PRODUCT = "add-product";
     public static final String UPDATE_ORDER = "update-order";
     public static final String SHOW_USER = "show-user";
+
+    public static final String CHANGE_EMAIL = "change-email";
+    public static final String CHANGE_PASSWORD = "change-password";
+    public static final String CHANGE_PERSONAL_DATA = "change-personal-data";
 }
