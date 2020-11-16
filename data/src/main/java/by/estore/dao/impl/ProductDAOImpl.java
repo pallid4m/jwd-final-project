@@ -30,6 +30,12 @@ public class ProductDAOImpl implements ProductDAO {
             "JOIN `categories` AS cat ON p.`category_id` = cat.`id` " +
             "JOIN `currencies` AS cur ON p.`currency_id` = cur.`id`;";
 
+    private static final String GET_LOW_COST_PRODUCTS_BY_LIMIT_QUERY =
+            "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`price`, p.`image`, p.`category_id`, cat.`name` AS `category_name`, p.`currency_id`, cur.`code` FROM `products` AS p " +
+            "JOIN `categories` AS cat ON p.`category_id` = cat.`id` " +
+            "JOIN `currencies` AS cur ON p.`currency_id` = cur.`id` " +
+            "ORDER BY p.`price` ASC LIMIT ?;";
+
     private static final String GET_PRODUCTS_BY_CATEGORY_QUERY =
             "SELECT p.`id`, p.`name` AS `product_name`, p.`description`, p.`price`, p.`image`, p.`category_id`, p.`currency_id`, cur.`code` FROM `products` AS p " +
             "JOIN `categories` AS cat ON p.`category_id` = cat.`id` " +
@@ -57,6 +63,10 @@ public class ProductDAOImpl implements ProductDAO {
     private static final String GET_PRODUCT_COUNT_QUERY =
             "SELECT COUNT(*) AS `product_count` FROM `products`;";
 
+    private static final String ADD_PRODUCT_BY_CATEGORY_NAME_AND_CURRENCY_CODE_QUERY =
+            "INSERT INTO `products` (`name`, `description`, `price`, `image`, `category_id`, `currency_id`) " +
+            "VALUES (?, ?, ?, ?, (SELECT `id` FROM `categories` WHERE `name` = ?), (SELECT `id` FROM `currencies` WHERE `code` = ?));";
+
     private static final String PRODUCT_ID = "id";
     private static final String PRODUCT_NAME = "product_name";
     private static final String PRODUCT_DESCRIPTION = "description";
@@ -72,7 +82,7 @@ public class ProductDAOImpl implements ProductDAO {
     private static final String PRODUCT_COUNT = "product_count";
 
     @Override
-    public List<Product> getAllProducts() throws DAOException {
+    public List<Product> findAllProducts() throws DAOException {
         List<Product> products = new ArrayList<>();
 
         Connection connection = null;
@@ -127,7 +137,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByCategory(Category category) throws DAOException {
+    public List<Product> findProductsByCategory(Category category) throws DAOException {
         List<Product> products = new ArrayList<>();
 
         Connection connection = null;
@@ -181,7 +191,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByCategory(Category category, int limit, int offset) throws DAOException {
+    public List<Product> findProductsByCategory(Category category, int limit, int offset) throws DAOException {
         List<Product> products = new ArrayList<>();
 
         Connection connection = null;
@@ -237,7 +247,63 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getProductsByOrder(Order order) throws DAOException {
+    public List<Product> findLowCostProductsByLimit(int limit) throws DAOException {
+        List<Product> products = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preparedStatement =  null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(GET_LOW_COST_PRODUCTS_BY_LIMIT_QUERY);
+            preparedStatement.setInt(1, limit);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Category category = new Category();
+                category.setId(resultSet.getShort(CATEGORY_ID));
+                category.setName(resultSet.getString(CATEGORY_NAME));
+
+                Currency currency = new Currency();
+                currency.setId(resultSet.getShort(CURRENCY_ID));
+                currency.setCode(resultSet.getString(CURRENCY_CODE));
+
+                Product product = Product.builder()
+                        .setId(resultSet.getLong(PRODUCT_ID))
+                        .setName(resultSet.getString(PRODUCT_NAME))
+                        .setDescription(resultSet.getString(PRODUCT_DESCRIPTION))
+                        .setPrice(resultSet.getBigDecimal(PRODUCT_PRICE))
+                        .setImage(resultSet.getString(PRODUCT_IMAGE))
+                        .setCategory(category)
+                        .setCurrency(currency)
+                        .build();
+
+                products.add(product);
+            }
+
+            connection.commit();
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
+
+        return products;
+    }
+
+    @Override
+    public Set<Product> findProductsByOrder(Order order) throws DAOException {
         Set<Product> products = new LinkedHashSet<>();
 
         Connection connection = null;
@@ -293,7 +359,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public long getProductCount() throws DAOException {
+    public long findProductCount() throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement =  null;
         ResultSet resultSet = null;
@@ -330,7 +396,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public Product getProductById(Long id) throws DAOException {
+    public Product findProductById(Long id) throws DAOException {
         Product product = null;
 
         Connection connection = null;
@@ -381,5 +447,48 @@ public class ProductDAOImpl implements ProductDAO {
         }
 
         return product;
+    }
+
+    @Override
+    public boolean addProduct(Product product) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement =  null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(ADD_PRODUCT_BY_CATEGORY_NAME_AND_CURRENCY_CODE_QUERY);
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setBigDecimal(3, product.getPrice());
+            preparedStatement.setString(4, product.getImage());
+            preparedStatement.setString(5, product.getCategory().getName());
+            preparedStatement.setString(6, product.getCurrency().getCode());
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Adding product failed, no rows affected.");
+                }
+                return false;
+            }
+
+            connection.commit();
+            return true;
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
     }
 }

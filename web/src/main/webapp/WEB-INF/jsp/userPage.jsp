@@ -18,6 +18,20 @@
 
     <jsp:include page="header.jsp"/>
 
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="main?command=profile-page">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="main?command=order-page">Orders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Payment</a>
+            </li>
+        </ul>
+    </div>
+
 <%--    <div class="container">--%>
 
 <%--&lt;%&ndash;        <form action="main?command=edit-user" method="post">&ndash;%&gt;--%>
@@ -45,243 +59,82 @@
 <%--        </c:if>--%>
 <%--    </div>--%>
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
+<%--    <div class="container">--%>
+<%--        <ul class="nav nav-tabs" id="myTab" role="tablist">--%>
+<%--            <li class="nav-item" role="presentation">--%>
+<%--                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>--%>
+<%--            </li>--%>
+<%--            <li class="nav-item" role="presentation">--%>
+<%--                <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Orders</a>--%>
+<%--            </li>--%>
+<%--            <li class="nav-item" role="presentation">--%>
+<%--                <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false">Payment</a>--%>
+<%--            </li>--%>
+<%--        </ul>--%>
+<%--        <div class="tab-content" id="myTabContent">--%>
+<%--            <div class="tab-pane fade how active" id="profile" role="tabpanel" aria-labelledby="profile-tab">--%>
+<%--                <div class="pb-5">--%>
+<%--                    <p class="h5">Change email</p><hr>--%>
+<%--                    <form class="col-md-6" action="" method="post">--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputEmail">Email</label>--%>
+<%--                            <input type="email" name="email" value="${sessionScope.user.email}" id="inputEmail" class="form-control" placeholder="" required="" autofocus=""/>--%>
+<%--                        </div>--%>
+<%--                        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">--%>
+<%--                        <button type="submit" class="btn btn-outline-dark btn-sm">Update email</button>--%>
+<%--                    </form>--%>
+<%--                </div>--%>
 
-<%--    <div class="container emp-profile">--%>
-<%--        <form method="post">--%>
-<%--            <div class="row">--%>
-<%--                <div class="col-md-4">--%>
-<%--                    <div class="profile-img">--%>
-<%--                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>--%>
-<%--                        <div class="file btn btn-lg btn-primary">--%>
-<%--                            Change Photo--%>
-<%--                            <input type="file" name="file"/>--%>
+<%--                <div class="pb-5">--%>
+<%--                    <p class="h5">Change password</p><hr>--%>
+<%--                    <form class="col-md-6" action="" method="post" autocomplete="off">--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputOldPassword">Old password</label>--%>
+<%--                            <input type="password" name="old-password" id="inputOldPassword" class="form-control" placeholder="" required=""/>--%>
 <%--                        </div>--%>
-<%--                    </div>--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputNewPassword">New password</label>--%>
+<%--                            <input type="password" name="new-password" id="inputNewPassword" class="form-control" placeholder="" required=""/>--%>
+<%--                        </div>--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputConfirmNewPassword">Confirm new password</label>--%>
+<%--                            <input type="password" name="confirm-new-password" id="inputConfirmNewPassword" class="form-control" placeholder="" required=""/>--%>
+<%--                        </div>--%>
+<%--                        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">--%>
+<%--                        <button type="submit" class="btn btn-outline-dark btn-sm">Update password</button>--%>
+<%--                    </form>--%>
 <%--                </div>--%>
-<%--                <div class="col-md-6">--%>
-<%--                    <div class="profile-head">--%>
-<%--                        <h5>--%>
-<%--                            Kshiti Ghelani--%>
-<%--                        </h5>--%>
-<%--                        <h6>--%>
-<%--                            Web Developer and Designer--%>
-<%--                        </h6>--%>
-<%--                        <p class="proile-rating">RANKINGS : <span>8/10</span></p>--%>
-<%--                        <ul class="nav nav-tabs" id="myTab" role="tablist">--%>
-<%--                            <li class="nav-item">--%>
-<%--                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>--%>
-<%--                            </li>--%>
-<%--                            <li class="nav-item">--%>
-<%--                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>--%>
-<%--                            </li>--%>
-<%--                        </ul>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="col-md-2">--%>
-<%--                    <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>--%>
+
+<%--                <div class="pb-5">--%>
+<%--                    <p class="h5">Personal data</p><hr>--%>
+<%--                    <form class="col-md-6" action="" method="post">--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputPhone">Phone</label>--%>
+<%--                            <input type="tel" name="phone" value="${sessionScope.user.phone}" id="inputPhone" class="form-control" placeholder="" required=""/>--%>
+<%--                        </div>--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputFirstName">First Name</label>--%>
+<%--                            <input type="text" name="first-name" value="${sessionScope.user.firstName}" id="inputFirstName" class="form-control" placeholder="" required=""/>--%>
+<%--                        </div>--%>
+<%--                        <div class="form-group input-group-sm">--%>
+<%--                            <label class="" for="inputLastName">Last Name</label>--%>
+<%--                            <input type="text" name="last-name" value="${sessionScope.user.lastName}" id="inputLastName" class="form-control" placeholder="" required=""/>--%>
+<%--                        </div>--%>
+<%--                        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">--%>
+<%--                        <button type="submit" class="btn btn-outline-dark btn-sm">Update profile</button>--%>
+<%--                    </form>--%>
 <%--                </div>--%>
 <%--            </div>--%>
-<%--            <div class="row">--%>
-<%--                <div class="col-md-4">--%>
-<%--                    <div class="profile-work">--%>
-<%--                        <p>WORK LINK</p>--%>
-<%--                        <a href="">Website Link</a><br/>--%>
-<%--                        <a href="">Bootsnipp Profile</a><br/>--%>
-<%--                        <a href="">Bootply Profile</a>--%>
-<%--                        <p>SKILLS</p>--%>
-<%--                        <a href="">Web Designer</a><br/>--%>
-<%--                        <a href="">Web Developer</a><br/>--%>
-<%--                        <a href="">WordPress</a><br/>--%>
-<%--                        <a href="">WooCommerce</a><br/>--%>
-<%--                        <a href="">PHP, .Net</a><br/>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="col-md-8">--%>
-<%--                    <div class="tab-content profile-tab" id="myTabContent">--%>
-<%--                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>User Id</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>Kshiti123</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Name</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>Kshiti Ghelani</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Email</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>kshitighelani@gmail.com</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Phone</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>123 456 7890</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Profession</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>Web Developer and Designer</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Experience</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>Expert</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Hourly Rate</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>10$/hr</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Total Projects</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>230</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>English Level</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>Expert</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <label>Availability</label>--%>
-<%--                                </div>--%>
-<%--                                <div class="col-md-6">--%>
-<%--                                    <p>6 months</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <div class="row">--%>
-<%--                                <div class="col-md-12">--%>
-<%--                                    <label>Your Bio</label><br/>--%>
-<%--                                    <p>Your detail description</p>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
+
+<%--            <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">--%>
+<%--                <p>orders content</p>--%>
 <%--            </div>--%>
-<%--        </form>--%>
+
+<%--            <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">--%>
+<%--                <p>payment content</p>--%>
+<%--            </div>--%>
+<%--        </div>--%>
 <%--    </div>--%>
-
-    <div class="container">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#main" role="tab" aria-controls="main" aria-selected="true">Main</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Orders</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false">Payment</a>
-            </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-
-            <div class="tab-pane fade show active" id="main" role="tabpanel" aria-labelledby="main-tab">
-                <p>main content</p>
-            </div>
-
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="pb-5">
-                    <p class="h5">Change email</p><hr>
-                    <form class="col-md-6" action="" method="post">
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputEmail">Email</label>
-                            <input type="email" name="email" value="${sessionScope.user.email}" id="inputEmail" class="form-control" placeholder="" required="" autofocus=""/>
-                        </div>
-                        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
-                        <button type="submit" class="btn btn-outline-dark btn-sm">Update email</button>
-                    </form>
-                </div>
-
-                <div class="pb-5">
-                    <p class="h5">Change password</p><hr>
-                    <form class="col-md-6" action="" method="post" autocomplete="off">
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputOldPassword">Old password</label>
-                            <input type="password" name="old-password" id="inputOldPassword" class="form-control" placeholder="" required=""/>
-                        </div>
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputNewPassword">New password</label>
-                            <input type="password" name="new-password" id="inputNewPassword" class="form-control" placeholder="" required=""/>
-                        </div>
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputConfirmNewPassword">Confirm new password</label>
-                            <input type="password" name="confirm-new-password" id="inputConfirmNewPassword" class="form-control" placeholder="" required=""/>
-                        </div>
-                        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
-                        <button type="submit" class="btn btn-outline-dark btn-sm">Update password</button>
-                    </form>
-                </div>
-
-                <div class="pb-5">
-                    <p class="h5">Personal data</p><hr>
-                    <form class="col-md-6" action="" method="post">
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputPhone">Phone</label>
-                            <input type="tel" name="phone" value="${sessionScope.user.phone}" id="inputPhone" class="form-control" placeholder="" required=""/>
-                        </div>
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputFirstName">First Name</label>
-                            <input type="text" name="first-name" value="${sessionScope.user.firstName}" id="inputFirstName" class="form-control" placeholder="" required=""/>
-                        </div>
-                        <div class="form-group input-group-sm">
-                            <label class="" for="inputLastName">Last Name</label>
-                            <input type="text" name="last-name" value="${sessionScope.user.lastName}" id="inputLastName" class="form-control" placeholder="" required=""/>
-                        </div>
-                        <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
-                        <button type="submit" class="btn btn-outline-dark btn-sm">Update profile</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                <p>orders content</p>
-            </div>
-
-            <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-                <p>payment content</p>
-            </div>
-        </div>
-    </div>
 
     <jsp:include page="footer.jsp"/>
 

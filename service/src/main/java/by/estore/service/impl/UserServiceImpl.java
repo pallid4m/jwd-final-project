@@ -1,7 +1,7 @@
 package by.estore.service.impl;
 
-import by.estore.entity.Order;
-import by.estore.entity.Product;
+import by.estore.dao.UserDAO;
+import by.estore.dto.ProfileDto;
 import by.estore.entity.User;
 import by.estore.dto.UserAuth;
 import by.estore.dao.DAOFactory;
@@ -16,15 +16,16 @@ import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
-import java.util.Set;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
+    private final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
+
     @Override
     public boolean saveUser(User user) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().saveUser(user);
+            return userDAO.saveUser(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -33,61 +34,37 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteUserById(Long id) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().deleteUserById(id);
+            return userDAO.deleteUserById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public User getUserById(Long id) throws ServiceException {
+    public User findUserById(Long id) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().getUserById(id);
+            return userDAO.findUserById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public User getUserByEmail(String email) throws ServiceException {
+    public User findUserByEmail(String email) throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().getUserByEmail(email);
+            return userDAO.findUserByEmail(email);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<User> getAllUsers() throws ServiceException {
+    public List<User> findAllUsers() throws ServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().getAllUsers();
+            return userDAO.findAllUsers();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-    }
-
-    @Override
-    public List<Order> getAllOrders(User user) throws ServiceException {
-        List<Order> orders = null;
-
-        try {
-            orders = DAOFactory.getInstance().getUserDAO().getAllOrders(user);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-
-        if (orders != null) {
-            try {
-                for (Order order : orders) {
-                    Set<Product> products = DAOFactory.getInstance().getProductDAO().getProductsByOrder(order);
-                    order.setProducts(products);
-                }
-            } catch (DAOException e) {
-                throw new ServiceException(e);
-            }
-        }
-
-        return orders;
     }
 
     @Override
@@ -95,7 +72,7 @@ public class UserServiceImpl implements UserService {
         User user = null;
 
         try {
-            user = DAOFactory.getInstance().getUserDAO().getUserByEmail(userAuth.getEmail());
+            user = userDAO.findUserByEmail(userAuth.getEmail());
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -116,7 +93,7 @@ public class UserServiceImpl implements UserService {
         User user = null;
 
         try {
-            user = DAOFactory.getInstance().getUserDAO().getUserByEmail(userAuth.getEmail());
+            user = userDAO.findUserByEmail(userAuth.getEmail());
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -129,10 +106,10 @@ public class UserServiceImpl implements UserService {
             String hash = BCrypt.hashpw(userAuth.getPassword(), BCrypt.gensalt());
             userAuth.setPassword(hash);
 
-            boolean isSaved = DAOFactory.getInstance().getUserDAO().saveUser(userAuthToUser(userAuth));
+            boolean isSaved = userDAO.saveUser(userAuthToUser(userAuth));
 
             if (isSaved) {
-                user = DAOFactory.getInstance().getUserDAO().getUserByEmail(userAuth.getEmail());
+                user = userDAO.findUserByEmail(userAuth.getEmail());
             }
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -141,20 +118,37 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-//    @Override
-//    public boolean updateEmailByUser(User user, String email) throws ServiceException {
-//        User user = null;
-//
-//        try {
-//            user = DAOFactory.getInstance().getUserDAO().getUserByEmail(email);
-//        } catch (DAOException e) {
-//            throw new ServiceException(e);
-//        }
-//
-//
-//
-//        return false;
-//    }
+    @Override
+    public boolean updateUserEmail(User user, ProfileDto profileDto) throws ServiceException {
+        user.setEmail(profileDto.getEmail());
+        try {
+            return userDAO.updateUserEmail(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean updateUserPassword(User user, ProfileDto profileDto) throws ServiceException {
+        user.setPassword(profileDto.getNewPassword());
+        try {
+            return userDAO.updateUserPassword(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean updateUserData(User user, ProfileDto profileDto) throws ServiceException {
+        user.setPhone(profileDto.getPhone());
+        user.setFirstName(profileDto.getFirstName());
+        user.setLastName(profileDto.getLastName());
+        try {
+            return userDAO.updateUserData(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 
     private User userAuthToUser(UserAuth userAuth) {
         return User.builder()

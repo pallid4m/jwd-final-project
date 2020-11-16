@@ -29,7 +29,7 @@
                 </c:if>
                 <c:if test="${sessionScope.user.role.name == 'User'}">
                     <li class="nav-item">
-                        <a class="nav-link" href="main?command=user-page">User</a>
+                        <a class="nav-link" href="main?command=profile-page">Profile</a>
                     </li>
                 </c:if>
             </c:if>

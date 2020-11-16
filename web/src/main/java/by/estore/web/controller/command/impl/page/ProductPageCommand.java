@@ -1,6 +1,7 @@
 package by.estore.web.controller.command.impl.page;
 
 import by.estore.entity.Product;
+import by.estore.service.ProductService;
 import by.estore.web.controller.command.Command;
 import by.estore.service.ServiceFactory;
 import by.estore.service.exception.ServiceException;
@@ -17,7 +18,11 @@ import java.io.IOException;
 public class ProductPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ProductPageCommand.class);
 
-    private final String PRODUCT_ID_PARAM = "id";
+    private final ProductService productService = ServiceFactory.getInstance().getProductService();
+
+    private static final String PRODUCT_ID_PARAM = "id";
+
+    private static final String PRODUCT_ATTR = "product";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,12 +31,13 @@ public class ProductPageCommand implements Command {
             productId = Long.parseLong(request.getParameter(PRODUCT_ID_PARAM));
         } catch (NumberFormatException e) {
             logger.warn(e);
-            throw e;
+            request.getRequestDispatcher(RouteHolder.FORWARD_PRODUCT_PAGE).forward(request, response);
+            return;
         }
 
         Product product = null;
         try {
-            product = ServiceFactory.getInstance().getProductService().getProductById(productId);
+            product = productService.findProductById(productId);
         } catch (ServiceException e) {
             logger.error(e);
             response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
@@ -40,7 +46,7 @@ public class ProductPageCommand implements Command {
 
         if (product != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("product", product);
+            session.setAttribute(PRODUCT_ATTR, product);
         }
 
         request.getRequestDispatcher(RouteHolder.FORWARD_PRODUCT_PAGE).forward(request, response);

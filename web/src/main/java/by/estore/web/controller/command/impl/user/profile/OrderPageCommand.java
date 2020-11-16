@@ -1,6 +1,7 @@
-package by.estore.web.controller.command.impl.user.cart;
+package by.estore.web.controller.command.impl.user.profile;
 
 import by.estore.entity.Order;
+import by.estore.entity.User;
 import by.estore.service.OrderService;
 import by.estore.service.ServiceFactory;
 import by.estore.service.exception.ServiceException;
@@ -12,34 +13,26 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
-public class PlaceOrderCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(PlaceOrderCommand.class);
+public class OrderPageCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(OrderPageCommand.class);
 
     private final OrderService orderService = ServiceFactory.getInstance().getOrderService();
 
-    private static final String ORDER_ATTR = "order";
-    private static final String CART_PRODUCTS_ATTR = "cartProducts";
+    private static final String USER_ATTR = "user";
+    private static final String ORDERS_ATTR = "orders";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
 
-        Order order = null;
-        if (session.getAttribute(ORDER_ATTR) != null) {
-            order = (Order) session.getAttribute(ORDER_ATTR);
-        }
+        User user = (User) request.getSession().getAttribute(USER_ATTR);
 
         try {
-            boolean isSavedOrder = false;
-            if (order != null) {
-                isSavedOrder = orderService.saveOrder(order);
-            }
-            if (isSavedOrder) {
-                session.removeAttribute(ORDER_ATTR);
-                session.removeAttribute(CART_PRODUCTS_ATTR);
+            List<Order> orders = orderService.findAllOrdersByUser(user);
+            if (orders != null) {
+                request.setAttribute(ORDERS_ATTR, orders);
             }
         } catch (ServiceException e) {
             logger.error(e);
@@ -47,6 +40,6 @@ public class PlaceOrderCommand implements Command {
             return;
         }
 
-        response.sendRedirect(request.getContextPath() + RouteHolder.CATAlOG_PAGE);
+        request.getRequestDispatcher(RouteHolder.FORWARD_ORDER_PAGE).forward(request, response);
     }
 }

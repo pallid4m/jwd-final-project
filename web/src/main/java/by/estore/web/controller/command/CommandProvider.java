@@ -1,16 +1,13 @@
 package by.estore.web.controller.command;
 
-import by.estore.web.controller.command.impl.admin.OrderListCommand;
-import by.estore.web.controller.command.impl.admin.ProductListCommand;
-import by.estore.web.controller.command.impl.admin.UserListCommand;
+import by.estore.web.controller.command.impl.admin.*;
 import by.estore.web.controller.command.impl.page.*;
 import by.estore.web.controller.command.impl.SignInCommand;
 import by.estore.web.controller.command.impl.SignOutCommand;
 import by.estore.web.controller.command.impl.SignUpCommand;
-import by.estore.web.controller.command.impl.user.cart.AddProductToCartCommand;
-import by.estore.web.controller.command.impl.user.cart.ChangeProductCountCommand;
-import by.estore.web.controller.command.impl.user.cart.PlaceOrderCommand;
-import by.estore.web.controller.command.impl.user.cart.RemoveProductFromCartCommand;
+import by.estore.web.controller.command.impl.user.cart.*;
+import by.estore.web.controller.command.impl.user.profile.OrderPageCommand;
+import by.estore.web.controller.command.impl.user.profile.ProfilePageCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +37,13 @@ public final class CommandProvider {
         commands.put(CommandName.REMOVE_PRODUCT_FROM_CART, new RemoveProductFromCartCommand());
         commands.put(CommandName.CHANGE_PRODUCT_COUNT, new ChangeProductCountCommand());
         commands.put(CommandName.PLACE_ORDER, new PlaceOrderCommand());
+
+        commands.put(CommandName.PROFILE_PAGE, new ProfilePageCommand());
+        commands.put(CommandName.ORDER_PAGE, new OrderPageCommand());
+
+        commands.put(CommandName.ADD_PRODUCT, new AddProductCommand());
+        commands.put(CommandName.UPDATE_ORDER, new UpdateOrderCommand());
+        commands.put(CommandName.SHOW_USER, new ShowUserCommand());
     }
 
     public Command getCommand(String commandName) {

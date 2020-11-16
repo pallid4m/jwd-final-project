@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="tag" uri="/WEB-INF/tld/pagination.tld" %>
 <c:if test="${!empty sessionScope.lang}">
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
@@ -24,7 +25,6 @@
                 <nav class="nav flex-column">
                     <a class="nav-link active" href="<c:url value="main?command=catalog-page&category=phone&page=1"/>"><fmt:message key="catalog.phones"/></a>
                     <a class="nav-link" href="<c:url value="main?command=catalog-page&category=laptop&page=1"/>"><fmt:message key="catalog.laptops"/></a>
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </nav>
             </div>
             <div class="col-md-10">
@@ -47,14 +47,14 @@
                                         <form action="main">
                                             <input type="hidden" name="command" value="add-product-to-cart">
                                             <input type="hidden" name="product-id" value="${product.id}">
-                                            <button class="btn btn-sm btn-outline-primary" type="submit">Add</button>
+                                            <button class="btn btn-sm btn-outline-primary" type="submit">Add to cart</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-end">
                             <c:url var="prevPageUrl" value="main" >
                                 <c:param name="command" value="catalog-page"/>
@@ -98,12 +98,18 @@
                             </c:choose>
                         </ul>
                     </nav>
+<%--                    <div class="row">--%>
+<%--                        <tag:paginate max="3" offset="${offset}" count="${count}" uri="${uri}" next="&raquo;" previous="&laquo;" />--%>
+<%--                    </div>--%>
+<%--                    <div class="row">--%>
+<%--                        <tag:paginate max="20" offset="1" count="20" uri="main?command=catalog-page" next="&raquo;" previous="&laquo;" />--%>
+<%--                    </div>--%>
                 </c:if>
             </div>
         </div>
     </div>
 
-    <jsp:include page="footer.jsp"/>
+<%--    <jsp:include page="footer.jsp"/>--%>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

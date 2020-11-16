@@ -1,6 +1,7 @@
 package by.estore.web.controller.command.impl.admin;
 
 import by.estore.entity.Order;
+import by.estore.service.OrderService;
 import by.estore.web.controller.command.Command;
 import by.estore.web.controller.command.RouteHolder;
 import by.estore.service.ServiceFactory;
@@ -17,19 +18,26 @@ import java.util.List;
 public class OrderListCommand implements Command {
     private static final Logger logger = LogManager.getLogger(OrderListCommand.class);
 
+    private final OrderService orderService = ServiceFactory.getInstance().getOrderService();
+
+    private static final String ORDERS_ATTR = "orders";
+    private static final String CONTENT_ATTR = "content";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Order> orders;
+
         try {
-            orders = ServiceFactory.getInstance().getOrderService().getAllOrders();
+            orders = orderService.findAllOrders();
         } catch (ServiceException e) {
             logger.error(e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
         }
-        request.setAttribute("orders", orders);
-        request.setAttribute("content", RouteHolder.ORDER_LIST);
 
-        request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp").forward(request, response);
+        request.setAttribute(ORDERS_ATTR, orders);
+        request.setAttribute(CONTENT_ATTR, RouteHolder.ORDER_LIST);
+
+        request.getRequestDispatcher(RouteHolder.FORWARD_ADMIN_PAGE).forward(request, response);
     }
 }

@@ -30,15 +30,13 @@
             <label class="sr-only" for="inputConfirmPassword"><fmt:message key="form.confirm_password"/></label>
             <input type="password" name="confirm-password" id="inputConfirmPassword" class="form-control" placeholder="<fmt:message key="form.confirm_password"/>" required=""/>
         </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="rememberCheck">
-            <label class="form-check-label" for="rememberCheck"><fmt:message key="form.remember_me"/></label>
+        <div class="form-group">
+            <label class="sr-only" for="inputPhone"><fmt:message key="form.phone"/></label>
+            <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="<fmt:message key="form.phone"/>" required=""/>
         </div>
         <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
         <button type="submit" class="btn btn-primary"><fmt:message key="sign_up.button"/></button>
     </form>
-
-    <jsp:include page="footer.jsp"/>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

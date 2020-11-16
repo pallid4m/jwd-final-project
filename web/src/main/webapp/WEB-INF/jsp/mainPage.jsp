@@ -19,40 +19,70 @@
     <jsp:include page="header.jsp"/>
 
     <div class="container">
-        <h3>Low price</h3>
-        <c:forEach var = "i" begin="1" end = "5">
+        <h3 class="pt-3">Low price</h3>
+        <c:forEach var="product" items="${requestScope.products}">
             <div class="row">
                 <div class="card-deck">
-                    <c:forEach var = "i" begin="1" end = "4">
-                        <div class="col mb-3">
-                            <div class="card">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <c:if test="${!empty products}">
-                                        <h5 class="card-title">${product.name}</h5>
-                                        <p class="card-text">${product.description}</p>
-                                    </c:if>
-                                    <c:if test="${empty products}">
-                                        <h5 class="card-title">Card title</h5>
-                                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    </c:if>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    <div class="">
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-outline-secondary" type="button">View</button>
-                                            <button class="btn btn-sm btn-outline-secondary" type="button">Edit</button>
-                                        </div>
+                    <div class="col mb-3">
+                        <div class="card">
+                            <div class="col-md-2" style="max-width: 100px;">
+                                <img class="card-img" src="<c:url value="/resources/img/product/${product.category.name}/${product.image}"/>" alt="${product.category.name}">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <div class="">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-secondary" type="button">View</button>
+                                        <form action="main">
+                                            <input type="hidden" name="command" value="add-product-to-cart">
+                                            <input type="hidden" name="product-id" value="${product.id}">
+                                            <button class="btn btn-sm btn-outline-primary" type="submit">Add to cart</button>
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Price</small>
-                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted"><b>Price ${product.price} ${product.currency.code}</b></small>
                             </div>
                         </div>
-                    </c:forEach>
+                    </div>
                 </div>
             </div>
         </c:forEach>
+
+<%--        <c:forEach var = "i" begin="1" end = "5">--%>
+<%--            <div class="row">--%>
+<%--                <div class="card-deck">--%>
+<%--                    <c:forEach var = "i" begin="1" end = "4">--%>
+<%--                        <div class="col mb-3">--%>
+<%--                            <div class="card">--%>
+<%--                                <img src="..." class="card-img-top" alt="...">--%>
+<%--                                <div class="card-body">--%>
+<%--                                    <c:if test="${!empty products}">--%>
+<%--                                        <h5 class="card-title">${product.name}</h5>--%>
+<%--                                        <p class="card-text">${product.description}</p>--%>
+<%--                                    </c:if>--%>
+<%--                                    <c:if test="${empty products}">--%>
+<%--                                        <h5 class="card-title">Card title</h5>--%>
+<%--                                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>--%>
+<%--                                    </c:if>--%>
+<%--                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
+<%--                                    <div class="">--%>
+<%--                                        <div class="btn-group">--%>
+<%--                                            <button class="btn btn-sm btn-outline-secondary" type="button">View</button>--%>
+<%--                                            <button class="btn btn-sm btn-outline-secondary" type="button">Edit</button>--%>
+<%--                                        </div>--%>
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                                <div class="card-footer">--%>
+<%--                                    <small class="text-muted">Price</small>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </c:forEach>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </c:forEach>--%>
     </div>
 
     <jsp:include page="footer.jsp"/>

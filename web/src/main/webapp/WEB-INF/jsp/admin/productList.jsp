@@ -11,31 +11,38 @@
     </button>
     <div class="collapse" id="collapseUserForm">
         <div class="card card-body">
-            <form>
+            <form action="main" method="post">
+                <input type="hidden" name="command" value="add-product">
                 <div class="row">
                     <div class="form-group col">
                         <label class="sr-only" for="inputName">Name</label>
-                        <input type="text" class="form-control" id="inputName" placeholder="Name">
-                    </div>
-                    <div class="form-group col">
-                        <label class="sr-only" for="inputDescription">Description</label>
-                        <input type="text" class="form-control" id="inputDescription" placeholder="Description">
+                        <input type="text" name="name" class="form-control" id="inputName" placeholder="Name">
                     </div>
                     <div class="form-group col">
                         <label class="sr-only" for="inputPrice">Price</label>
-                        <input type="text" class="form-control" id="inputPrice" placeholder="Price">
+                        <input type="text" name="price" class="form-control" id="inputPrice" placeholder="Price">
                     </div>
                     <div class="form-group col">
-                        <label class="sr-only" for="inputCurrency">Currency</label>
-                        <input type="text" class="form-control" id="inputCurrency" placeholder="Currency">
+                        <label class="sr-only" for="selectCurrency">Currency</label>
+                        <select name="currency" class="form-control" id="selectCurrency">
+                            <option value="">Select currency...</option>
+                            <option>BYN</option>
+                            <option>RUB</option>
+                            <option>USD</option>
+                        </select>
                     </div>
                     <div class="form-group col">
                         <label class="sr-only" for="selectCategory">Category</label>
-                        <select class="form-control" id="selectCategory">
+                        <select name="category" class="form-control" id="selectCategory">
                             <option value="">Select category...</option>
                             <option>Phone</option>
                             <option>Laptop</option>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col">
+                        <textarea name="description" class="form-control" aria-label="With textarea" placeholder="Description"></textarea>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-secondary">add</button>

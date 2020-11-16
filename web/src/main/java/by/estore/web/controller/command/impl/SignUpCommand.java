@@ -4,6 +4,7 @@ import by.estore.entity.User;
 import by.estore.web.controller.command.Command;
 import by.estore.web.controller.command.RouteHolder;
 import by.estore.dto.UserAuth;
+import by.estore.web.validation.impl.PasswordValidator;
 import by.estore.web.validation.impl.UserAuthValidator;
 import by.estore.web.validation.Validator;
 import by.estore.service.ServiceFactory;
@@ -20,12 +21,14 @@ import java.io.IOException;
 public class SignUpCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SignUpCommand.class);
 
-    public static final String LOGIN_PARAM = "login";
-    public static final String EMAIL_PARAM = "email";
-    public static final String PASSWORD_PARAM = "password";
-    public static final String CONFIRM_PASSWORD_PARAM = "confirm-password";
-    public static final String PHONE_PARAM = "phone";
-    public static final String REMEMBER_ME_PARAM = "remember-me";
+    private static final String EMAIL_PARAM = "email";
+    private static final String PASSWORD_PARAM = "password";
+    private static final String CONFIRM_PASSWORD_PARAM = "confirm-password";
+    private static final String PHONE_PARAM = "phone";
+
+    private static final String VALIDATION_ERROR = "error";
+
+    private static final String USER_ATTR = "user";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,11 +36,10 @@ public class SignUpCommand implements Command {
         String email = request.getParameter(EMAIL_PARAM);
         String password = request.getParameter(PASSWORD_PARAM);
         String confirmPassword = request.getParameter(CONFIRM_PASSWORD_PARAM);
-        String rememberMe = request.getParameter(REMEMBER_ME_PARAM);
+        String phone = request.getParameter(PHONE_PARAM);
 
-        // TODO: 12-Oct-20 js
         if (!password.equals(confirmPassword)) {
-            logger.info("Passwords don't match");
+            request.setAttribute(VALIDATION_ERROR, PasswordValidator.MESSAGE);
             response.sendRedirect(request.getContextPath() + RouteHolder.SIGN_UP_PAGE);
             return;
         }
@@ -45,10 +47,11 @@ public class SignUpCommand implements Command {
         UserAuth userAuth = new UserAuth();
         userAuth.setEmail(email);
         userAuth.setPassword(password);
+        userAuth.setPhone(phone);
 
         Validator<UserAuth> validator = new UserAuthValidator();
         if (!validator.isValid(userAuth)) {
-            logger.info("user fields aren't valid");
+            request.setAttribute(VALIDATION_ERROR, validator.getMessage());
             response.sendRedirect(request.getContextPath() + RouteHolder.SIGN_UP_PAGE);
             return;
         }
@@ -58,6 +61,7 @@ public class SignUpCommand implements Command {
             user = ServiceFactory.getInstance().getUserService().register(userAuth);
         } catch (UserAlreadyExistException e) {
             logger.info(e.getMessage());
+            request.setAttribute(VALIDATION_ERROR, e.getMessage());
             response.sendRedirect(request.getContextPath() + RouteHolder.SIGN_UP_PAGE);
             return;
         } catch (ServiceException e) {
@@ -67,10 +71,7 @@ public class SignUpCommand implements Command {
         }
 
         if (user != null) {
-            request.getSession().setAttribute("user", user);
-            if (rememberMe != null) {
-                // TODO: 12-Oct-20 remember me
-            }
+            request.getSession().setAttribute(USER_ATTR, user);
         }
 
         response.sendRedirect(request.getContextPath() + RouteHolder.MAIN_PAGE);

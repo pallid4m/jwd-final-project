@@ -1,6 +1,7 @@
 package by.estore.web.controller.command.impl.admin;
 
 import by.estore.entity.User;
+import by.estore.service.UserService;
 import by.estore.web.controller.command.Command;
 import by.estore.web.controller.command.RouteHolder;
 import by.estore.service.ServiceFactory;
@@ -17,21 +18,28 @@ import java.util.List;
 public class UserListCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UserListCommand.class);
 
+    private final UserService userService = ServiceFactory.getInstance().getUserService();
+
     private static final String USER_LIST_PARAM = "user-list";
+
+    private static final String USERS_ATTR = "users";
+    private static final String CONTENT_ATTR = "content";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> users;
+
         try {
-            users = ServiceFactory.getInstance().getUserService().getAllUsers();
+            users = userService.findAllUsers();
         } catch (ServiceException e) {
             logger.error(e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
         }
-        request.setAttribute("users", users);
-        request.setAttribute("content", RouteHolder.USER_LIST);
 
-        request.getRequestDispatcher("/WEB-INF/jsp/adminPage.jsp").forward(request, response);
+        request.setAttribute(USERS_ATTR, users);
+        request.setAttribute(CONTENT_ATTR, RouteHolder.USER_LIST);
+
+        request.getRequestDispatcher(RouteHolder.FORWARD_ADMIN_PAGE).forward(request, response);
     }
 }

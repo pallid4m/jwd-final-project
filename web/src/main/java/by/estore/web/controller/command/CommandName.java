@@ -22,7 +22,14 @@ public final class CommandName {
     public static final String CHANGE_PRODUCT_COUNT = "change-product-count";
     public static final String PLACE_ORDER = "place-order";
 
+    public static final String PROFILE_PAGE = "profile-page";
+    public static final String ORDER_PAGE = "order-page";
+
     public static final String USER_LIST = "user-list";
     public static final String PRODUCT_LIST = "product-list";
     public static final String ORDER_LIST = "order-list";
+
+    public static final String ADD_PRODUCT = "add-product";
+    public static final String UPDATE_ORDER = "update-order";
+    public static final String SHOW_USER = "show-user";
 }

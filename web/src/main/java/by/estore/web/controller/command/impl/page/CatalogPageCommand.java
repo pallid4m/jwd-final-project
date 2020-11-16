@@ -2,6 +2,7 @@ package by.estore.web.controller.command.impl.page;
 
 import by.estore.entity.Category;
 import by.estore.entity.Product;
+import by.estore.service.ProductService;
 import by.estore.web.controller.command.Command;
 import by.estore.dto.Pagination;
 import by.estore.service.ServiceFactory;
@@ -19,10 +20,16 @@ import java.util.List;
 public class CatalogPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger(CatalogPageCommand.class);
 
-    private final String CATEGORY_PARAM = "category";
-    private final String PAGE_PARAM = "page";
+    private final ProductService productService = ServiceFactory.getInstance().getProductService();
 
-    private final int ITEMS_COUNT = 5;
+    private static final String CATEGORY_PARAM = "category";
+    private static final String PAGE_PARAM = "page";
+
+    private static final String CATEGORY_ATTR = "category";
+    private static final String PRODUCTS_ATTR = "products";
+    private static final String PAGINATION_ATTR = "pagination";
+
+    private static final int ITEMS_COUNT = 5;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,8 +53,8 @@ public class CatalogPageCommand implements Command {
             List<Product> products;
             long productCount;
             try {
-                products = ServiceFactory.getInstance().getProductService().getProductsByCategory(category, ITEMS_COUNT, offset);
-                productCount = ServiceFactory.getInstance().getProductService().getProductCount();
+                products = productService.findProductsByCategory(category, ITEMS_COUNT, offset);
+                productCount = productService.findProductCount();
             } catch (ServiceException e) {
                 logger.error(e);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -64,9 +71,9 @@ public class CatalogPageCommand implements Command {
                 pagination.setNextPage(nextPage);
                 pagination.setLastPage(lastPage);
 
-                request.setAttribute("category", category);
-                request.setAttribute("products", products);
-                request.setAttribute("pagination", pagination);
+                request.setAttribute(CATEGORY_ATTR, category);
+                request.setAttribute(PRODUCTS_ATTR, products);
+                request.setAttribute(PAGINATION_ATTR, pagination);
             }
         }
 

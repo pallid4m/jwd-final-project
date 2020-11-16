@@ -1,6 +1,7 @@
-package by.estore.web.controller.command.impl.admin;
+package by.estore.web.controller.command.impl.user.profile;
 
 import by.estore.web.controller.command.Command;
+import by.estore.web.controller.command.RouteHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,15 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AddUserCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(AddUserCommand.class);
-
-    private static final String EMAIL_PARAM = "email";
-    private static final String PASSWORD_PARAM = "password";
-    private static final String ROLE_PARAM = "role";
+public class ProfilePageCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(ProfilePageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+        request.getRequestDispatcher(RouteHolder.FORWARD_PROFILE_PAGE).forward(request, response);
     }
 }

@@ -11,11 +11,10 @@
         <thead class="table-dark">
         <tr>
             <th scope="col">Id</th>
-            <th scope="col">Create date</th>
+            <th scope="col">Date order</th>
             <th scope="col">Amount</th>
             <th scope="col">Currency</th>
             <th scope="col">Status</th>
-<%--            <th scope="col">Amount</th>--%>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -23,15 +22,37 @@
         <c:forEach var="order" items="${orders}">
             <tr>
                 <th scope="row">${order.id}</th>
-                <td>${order.createDate}</td>
+                <fmt:parseDate value="${order.createDate}" type="date" pattern="y-M-dd'T'H:m" var="parsedDate"/>
+                <td><fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd HH:mm"/></td>
                 <td>${order.amount}</td>
                 <td>${order.currency.code}</td>
                 <td>${order.orderStatus.state}</td>
-<%--                <td>${order.amount}</td>--%>
                 <td>
-                    <a href="#">View</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
+                    <div class="row">
+                        <form action="main">
+                            <input type="hidden" name="command" value="update-order">
+                            <input type="hidden" name="id" value="${order.id}">
+                            <div class="row">
+                                <div class="form-group col">
+                                    <label class="sr-only" for="selectState">State</label>
+                                    <select name="state" class="form-control" id="selectState">
+                                        <option>Processing</option>
+                                        <option>Completed</option>
+                                        <option>Canceled</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-outline-primary">Update state</button>
+                                </div></div>
+                        </form>
+                        <form action="main">
+                            <input type="hidden" name="command" value="show-user">
+                            <input type="hidden" name="order-id" value="${order.id}">
+                            <div class="col">
+                                <button type="submit" class="btn btn-outline-primary">Show user</button>
+                            </div>
+                        </form>
+                    </div>
                 </td>
             </tr>
         </c:forEach>

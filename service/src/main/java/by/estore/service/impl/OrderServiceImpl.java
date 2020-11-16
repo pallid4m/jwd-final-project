@@ -1,28 +1,58 @@
 package by.estore.service.impl;
 
-import by.estore.entity.Currency;
-import by.estore.entity.Order;
+import by.estore.dao.OrderDAO;
+import by.estore.dao.ProductDAO;
+import by.estore.entity.*;
 import by.estore.dao.DAOFactory;
 import by.estore.dao.exception.DAOException;
-import by.estore.entity.OrderStatus;
-import by.estore.entity.Product;
 import by.estore.service.OrderService;
 import by.estore.service.exception.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class OrderServiceImpl implements OrderService {
+    private static final Logger logger = LogManager.getLogger(OrderServiceImpl.class);
+
+    private final OrderDAO orderDAO = DAOFactory.getInstance().getOrderDAO();
+    private final ProductDAO productDAO = DAOFactory.getInstance().getProductDAO();
 
     @Override
-    public List<Order> getAllOrders() throws ServiceException {
+    public List<Order> findAllOrders() throws ServiceException {
         try {
-            return DAOFactory.getInstance().getOrderDAO().getAllOrders();
+            return orderDAO.findAllOrders();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public List<Order> findAllOrdersByUser(User user) throws ServiceException {
+        List<Order> orders = null;
+
+        try {
+            orders = orderDAO.findAllOrdersByUser(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        if (orders != null) {
+            try {
+                for (Order order : orders) {
+                    Set<Product> products = productDAO.findProductsByOrder(order);
+                    order.setProducts(products);
+                }
+            } catch (DAOException e) {
+                throw new ServiceException(e);
+            }
+        }
+
+        user.setOrders(orders);
+
+        return orders;
     }
 
     @Override
@@ -96,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(orderStatus);
 
         try {
-            return DAOFactory.getInstance().getOrderDAO().saveOrder(order);
+            return orderDAO.saveOrder(order);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

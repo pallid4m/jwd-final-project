@@ -1,7 +1,7 @@
 package by.estore.web.controller.command.impl.user.cart;
 
 import by.estore.entity.Order;
-import by.estore.entity.Product;
+import by.estore.service.OrderService;
 import by.estore.service.ServiceFactory;
 import by.estore.service.exception.ServiceException;
 import by.estore.web.controller.command.Command;
@@ -18,8 +18,12 @@ import java.io.IOException;
 public class ChangeProductCountCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ChangeProductCountCommand.class);
 
-    public static final String PRODUCT_ID_PARAM = "product-id";
-    public static final String PRODUCT_COUNT_PARAM = "count";
+    private final OrderService orderService = ServiceFactory.getInstance().getOrderService();
+
+    private static final String PRODUCT_ID_PARAM = "product-id";
+    private static final String PRODUCT_COUNT_PARAM = "count";
+
+    private static final String ORDER_ATTR = "order";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,10 +40,10 @@ public class ChangeProductCountCommand implements Command {
         }
 
         HttpSession session = request.getSession();
-        Order order = (Order) session.getAttribute("order");
+        Order order = (Order) session.getAttribute(ORDER_ATTR);
 
         try {
-            ServiceFactory.getInstance().getOrderService().changeProductCountById(order, productId, productCount);
+            orderService.changeProductCountById(order, productId, productCount);
         } catch (ServiceException e) {
             logger.error(e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

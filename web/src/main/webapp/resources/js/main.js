@@ -9,9 +9,3 @@ function input_log() {
 }
 
 input_log();
-// alert("pff");
-
-// if (confirm("bla bla")) {
-//     alert("ok");
-// }
-

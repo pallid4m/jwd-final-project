@@ -25,9 +25,23 @@
                         <label class="sr-only" for="selectRole">Role</label>
                         <select class="form-control" id="selectRole">
                             <option value="">Select role...</option>
-                            <option>admin</option>
-                            <option>user</option>
+                            <option>Admin</option>
+                            <option>User</option>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col">
+                        <label class="sr-only" for="inputPhone">Phone</label>
+                        <input type="text" class="form-control" id="inputPhone" placeholder="Phone">
+                    </div>
+                    <div class="form-group col">
+                        <label class="sr-only" for="inputFirstName">First name</label>
+                        <input type="text" class="form-control" id="inputFirstName" placeholder="First name">
+                    </div>
+                    <div class="form-group col">
+                        <label class="sr-only" for="inputLastName">Last name</label>
+                        <input type="text" class="form-control" id="inputLastName" placeholder="Last name">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-secondary">add</button>

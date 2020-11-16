@@ -1,5 +1,6 @@
 package by.estore.service;
 
+import by.estore.service.impl.AdminServiceImpl;
 import by.estore.service.impl.OrderServiceImpl;
 import by.estore.service.impl.ProductServiceImpl;
 import by.estore.service.impl.UserServiceImpl;
@@ -10,6 +11,7 @@ public final class ServiceFactory {
     private final UserService userService = new UserServiceImpl();
     private final ProductService productService = new ProductServiceImpl();
     private final OrderService orderService = new OrderServiceImpl();
+    private final AdminService adminService = new AdminServiceImpl();
 
     private ServiceFactory() {}
 
@@ -27,5 +29,9 @@ public final class ServiceFactory {
 
     public OrderService getOrderService() {
         return orderService;
+    }
+
+    public AdminService getAdminService() {
+        return adminService;
     }
 }

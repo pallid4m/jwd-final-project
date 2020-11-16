@@ -7,9 +7,10 @@ import by.estore.service.exception.ServiceException;
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getAllProducts() throws ServiceException;
-    List<Product> getProductsByCategory(Category category) throws ServiceException;
-    List<Product> getProductsByCategory(Category category, int limit, int offset) throws ServiceException;
-    long getProductCount() throws ServiceException;
-    Product getProductById(Long id) throws ServiceException;
+    List<Product> findAllProducts() throws ServiceException;
+    List<Product> findProductsByCategory(Category category) throws ServiceException;
+    List<Product> findProductsByCategory(Category category, int limit, int offset) throws ServiceException;
+    List<Product> findLowCostProductsByLimit(int limit) throws ServiceException;
+    long findProductCount() throws ServiceException;
+    Product findProductById(Long id) throws ServiceException;
 }

@@ -26,15 +26,9 @@
             <label class="sr-only" for="inputPassword"><fmt:message key="form.password"/></label>
             <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="form.password"/>" required=""/>
         </div>
-        <div class="form-group form-check">
-            <input type="checkbox" name="remember-me"  class="form-check-input" id="rememberCheck">
-            <label class="form-check-label" for="rememberCheck"><fmt:message key="form.remember_me"/></label>
-        </div>
         <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
         <button type="submit" class="btn btn-primary"><fmt:message key="sign_in.button"/></button>
     </form>
-
-    <jsp:include page="footer.jsp"/>
 
 <script src="<c:url value="/resources/js/main.js"/>"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

@@ -17,7 +17,7 @@ public class OrderDAOImplTest {
 
     @Test
     public void getAllOrdersTest() throws DAOException {
-        List<Order> orders = orderDAO.getAllOrders();
+        List<Order> orders = orderDAO.findAllOrders();
         orders.forEach(logger::debug);
     }
 }

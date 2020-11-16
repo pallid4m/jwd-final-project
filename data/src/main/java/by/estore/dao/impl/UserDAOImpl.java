@@ -38,12 +38,20 @@ public class UserDAOImpl implements UserDAO {
             "SELECT u.`id`, u.`email`, u.`password`, u.`phone`, u.`create_date`, u.`first_name`, u.`last_name`, u.`image`, u.`role_id`, r.`name` AS role_name FROM `users` AS u " +
             "JOIN `roles` AS r ON u.`role_id` = r.`id`;";
 
-    private static final String GET_ALL_ORDERS_BY_USER_ID_QUERY =
-            "SELECT o.`id`, o.`create_date`, o.`amount`, o.`order_status_id`, o.`currency_id`, c.`code` AS currency, os.`state` AS status FROM `orders` AS o " +
-            "JOIN `order_status` AS os ON os.`id` = o.`order_status_id` " +
-            "JOIN `currencies` AS c ON c.`id` = o.`currency_id` " +
-            "WHERE `user_id` = ?;";
+    private static final String UPDATE_USER_EMAIL_BY_USER_ID_QUERY =
+            "UPDATE `users` SET `email` = ? WHERE `id` = ?;";
 
+    private static final String UPDATE_USER_PASSWORD_BY_USER_ID_QUERY =
+            "UPDATE `users` SET `password` = ? WHERE `id` = ?;";
+
+    private static final String UPDATE_USER_DATA_BY_USER_ID_QUERY =
+            "UPDATE `users` SET `phone` = ?, `first_name` = ?, `last_name` = ? " +
+            "WHERE `id` = ?;";
+
+    private static final String GET_USER_BY_ORDER_ID_QUERY =
+            "SELECT u.`id`, u.`email`, `phone`, `first_name`, `last_name`, u.`role_id`, r.`name` AS role_name FROM `users` AS u " +
+            "JOIN `roles` AS r ON u.`role_id` = r.`id` " +
+            "JOIN `orders` AS o ON o.`user_id` = u.`id` AND o.`id` = ?;";
 
     private static final String USER_ID = "id";
     private static final String USER_EMAIL = "email";
@@ -56,18 +64,6 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String ROLE_ID = "role_id";
     private static final String ROLE_NAME = "role_name";
-
-    private static final String ORDER_STATUS_ID = "order_status_id";
-    private static final String ORDER_STATUS_STATE = "state";
-
-    private static final String CURRENCY_ID = "currency_id";
-    private static final String CURRENCY_CODE = "code";
-
-    private static final String ORDER_ID = "id";
-    private static final String ORDER_CREATE_DATE = "create_date";
-    private static final String ORDER_AMOUNT = "amount";
-    private static final String ORDER_STATUS = "status";
-    private static final String ORDER_CURRENCY = "currency";
 
     @Override
     public boolean saveUser(User user) throws DAOException {
@@ -117,7 +113,9 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setLong(1, id);
 
             int records = preparedStatement.executeUpdate();
-//            logger.debug("User was deleted, count records: {}", records);
+            if (logger.isDebugEnabled()) {
+                logger.debug("User was deleted, count records: {}", records);
+            }
 
             connection.commit();
             return true;
@@ -136,7 +134,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserById(Long id) throws DAOException {
+    public User findUserById(Long id) throws DAOException {
         User user= null;
 
         Connection connection = null;
@@ -188,7 +186,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByEmail(String email) throws DAOException {
+    public User findUserByEmail(String email) throws DAOException {
         User user = null;
 
         Connection connection = null;
@@ -240,7 +238,56 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() throws DAOException {
+    public User findUserByOrderId(Long orderId) throws DAOException {
+        User user= null;
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(GET_USER_BY_ORDER_ID_QUERY);
+            preparedStatement.setLong(1, orderId);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Role role = new Role();
+                role.setId(resultSet.getByte(ROLE_ID));
+                role.setName(resultSet.getString(ROLE_NAME));
+
+                user = User.builder()
+                        .setId(resultSet.getLong(USER_ID))
+                        .setEmail(resultSet.getString(USER_EMAIL))
+                        .setPhone(resultSet.getString(USER_PHONE))
+                        .setFirstName(resultSet.getString(USER_FIRST_NAME))
+                        .setLastName(resultSet.getString(USER_LAST_NAME))
+                        .setRole(role)
+                        .build();
+            }
+
+            connection.commit();
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
+
+        return user;
+    }
+
+    @Override
+    public List<User> findAllUsers() throws DAOException {
         List<User> users = new ArrayList<>();
 
         Connection connection = null;
@@ -293,43 +340,22 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<Order> getAllOrders(User user) throws DAOException {
-        List<Order> orders = new ArrayList<>();
-
+    public boolean updateUserEmail(User user) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
 
         try {
             connection = connectionPool.takeConnection();
             connection.setAutoCommit(false);
 
-            preparedStatement = connection.prepareStatement(GET_ALL_ORDERS_BY_USER_ID_QUERY);
-            preparedStatement.setLong(1, user.getId());
+            preparedStatement = connection.prepareStatement(UPDATE_USER_EMAIL_BY_USER_ID_QUERY);
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setLong(2, user.getId());
 
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                OrderStatus orderStatus = new OrderStatus();
-                orderStatus.setId(resultSet.getByte(ORDER_STATUS_ID));
-                orderStatus.setState(resultSet.getString(ORDER_STATUS));
-
-                Currency currency = new Currency();
-                currency.setId(resultSet.getShort(CURRENCY_ID));
-                currency.setCode(resultSet.getString(ORDER_CURRENCY));
-
-                Order order = Order.builder()
-                        .setId(resultSet.getLong(ORDER_ID))
-                        .setCreateDate(resultSet.getObject(ORDER_CREATE_DATE, LocalDateTime.class))
-                        .setAmount(resultSet.getBigDecimal(ORDER_AMOUNT))
-                        .setOrderStatus(orderStatus)
-                        .setCurrency(currency)
-                        .build();
-
-                orders.add(order);
-            }
+            preparedStatement.executeUpdate();
 
             connection.commit();
+            return true;
         } catch (ConnectionPoolException | SQLException e) {
             if (connection != null) {
                 try {
@@ -340,9 +366,71 @@ public class UserDAOImpl implements UserDAO {
             }
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            connectionPool.closeConnection(connection, preparedStatement);
         }
+    }
 
-        return orders;
+    @Override
+    public boolean updateUserPassword(User user) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(UPDATE_USER_PASSWORD_BY_USER_ID_QUERY);
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setLong(2, user.getId());
+
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+            return true;
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement);
+        }
+    }
+
+    @Override
+    public boolean updateUserData(User user) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(UPDATE_USER_DATA_BY_USER_ID_QUERY);
+            preparedStatement.setString(1, user.getPhone());
+            preparedStatement.setString(2, user.getFirstName());
+            preparedStatement.setString(3, user.getLastName());
+            preparedStatement.setLong(4, user.getId());
+
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+            return true;
+        } catch (ConnectionPoolException | SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    throw new DAOException(e1);
+                }
+            }
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement);
+        }
     }
 }
