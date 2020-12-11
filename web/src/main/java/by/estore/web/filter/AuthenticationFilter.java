@@ -26,7 +26,7 @@ public class AuthenticationFilter extends HttpFilter {
 
     private static final String COMMAND_PARAM = "command";
 
-    private static final String POST_METHOD = "POS";
+    private static final String POST_METHOD = "POST";
 
     private static final String CSRF_TOKEN_SAMPLE = "csrf_sample";
 

@@ -17,7 +17,8 @@
 <body>
     <jsp:include page="header.jsp"/>
 
-    <form class="sign-up" action="main?command=sign-up" method="post">
+    <form class="sign-up" action="main" method="post">
+        <input type="hidden" name="command" value="sign-up">
         <div class="form-group">
             <label class="sr-only" for="inputEmail"><fmt:message key="form.email"/></label>
             <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="form.email"/>" required="" autofocus=""/>

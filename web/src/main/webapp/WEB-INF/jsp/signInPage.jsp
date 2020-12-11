@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="tag" uri="/WEB-INF/tld/validation.tld" %>
 <c:if test="${!empty sessionScope.lang}">
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
@@ -17,15 +18,21 @@
 <body>
     <jsp:include page="header.jsp"/>
 
-    <form class="sign-in" action="main?command=sign-in" method="post">
+    <form class="sign-in" action="main" method="post">
+        <input type="hidden" name="command" value="sign-in">
         <div class="form-group">
             <label class="sr-only" for="inputEmail"><fmt:message key="form.email"/></label>
-            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="form.email"/>" required="" autofocus=""/>
+            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="<fmt:message key="form.email"/>" autofocus=""/>
+            <tag:validate path="email"/>
         </div>
         <div class="form-group">
             <label class="sr-only" for="inputPassword"><fmt:message key="form.password"/></label>
             <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<fmt:message key="form.password"/>" required=""/>
+            <tag:validate path="password"/>
         </div>
+        <tag:validate path="userNotFound"/>
+        <tag:validate path="auth"/>
+        <tag:validate path="userAlreadyExist"/>
         <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
         <button type="submit" class="btn btn-primary"><fmt:message key="sign_in.button"/></button>
     </form>

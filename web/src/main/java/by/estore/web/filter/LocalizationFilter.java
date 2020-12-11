@@ -22,6 +22,9 @@ public class LocalizationFilter extends HttpFilter {
     private static final String EN_US = "en_US";
     private static final String RU_RU = "ru_RU";
 
+    private static final String QUERY_START = "?";
+    private static final String QUERY_SEPARATOR = "&";
+
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String lang = request.getParameter(LANG_PARAM);
@@ -33,7 +36,7 @@ public class LocalizationFilter extends HttpFilter {
                 response.setLocale(RU_RU_LOCALE);
             }
             request.getSession().setAttribute(LANG_PARAM, lang);
-            response.sendRedirect(request.getRequestURI() + "?" + deleteQueryParam(request.getQueryString(), lang));
+            response.sendRedirect(request.getRequestURI() + QUERY_START + deleteQueryParam(request.getQueryString(), lang));
             return;
         }
 
@@ -41,6 +44,6 @@ public class LocalizationFilter extends HttpFilter {
     }
 
     private String deleteQueryParam(String query, String param) {
-        return query.replaceAll("&" + LANG_PARAM + "=(" + param + ")", "");
+        return query.replaceAll(QUERY_SEPARATOR + LANG_PARAM + "=(" + param + ")", "");
     }
 }

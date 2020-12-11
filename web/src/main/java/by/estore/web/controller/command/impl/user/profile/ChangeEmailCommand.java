@@ -8,7 +8,9 @@ import by.estore.service.exception.ServiceException;
 import by.estore.web.controller.command.Command;
 import by.estore.web.controller.command.RouteHolder;
 import by.estore.web.validation.Validator;
+import by.estore.web.validation.ValidatorFactory;
 import by.estore.web.validation.impl.EmailValidator;
+import by.estore.web.validation.impl.UserAuthValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,15 +28,15 @@ public class ChangeEmailCommand implements Command {
 
     private static final String USER_ATTR = "user";
 
-    private static final String VALIDATION_ERROR = "error";
+    private static final String EMAIL_ERROR = "email-error";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter(EMAIL_PARAM);
 
-        Validator<String> emailValidator = new EmailValidator();
+        Validator<String> emailValidator = ValidatorFactory.getInstance().getEmailValidator();
         if (!emailValidator.isValid(email)) {
-            request.setAttribute(VALIDATION_ERROR, emailValidator.getMessage());
+            request.setAttribute(EMAIL_ERROR, ((EmailValidator) emailValidator).getError());
             response.sendRedirect(request.getContextPath() + RouteHolder.SIGN_UP_PAGE);
             return;
         }

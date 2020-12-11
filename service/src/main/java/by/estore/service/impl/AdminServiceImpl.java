@@ -30,6 +30,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    // TODO: 16-Nov-20 blacklist
     @Override
     public boolean addUserToBlackListById(Long userId) throws ServiceException {
         return false;

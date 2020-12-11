@@ -36,7 +36,7 @@
                                         <form action="main">
                                             <input type="hidden" name="command" value="add-product-to-cart">
                                             <input type="hidden" name="product-id" value="${product.id}">
-                                            <button class="btn btn-sm btn-outline-primary" type="submit">Add to cart</button>
+                                            <button class="btn btn-sm btn-outline-primary" type="submit"><fmt:message key="action.add.to.cart"/></button>
                                         </form>
                                     </div>
                                 </div>

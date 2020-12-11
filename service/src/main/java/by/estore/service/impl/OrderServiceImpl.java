@@ -119,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean saveOrder(Order order) throws ServiceException {
 
         // TODO: 12-Nov-20 validate order
+        // TODO: 16-Nov-20 order status data
 
         OrderStatus orderStatus = new OrderStatus();
         orderStatus.setId((byte) 1);

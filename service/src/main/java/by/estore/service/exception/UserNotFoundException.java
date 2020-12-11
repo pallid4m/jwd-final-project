@@ -2,6 +2,8 @@ package by.estore.service.exception;
 
 public class UserNotFoundException extends RuntimeException {
 
+    public final String NAME = "userNotFound";
+
     private String message;
 
     public UserNotFoundException(String message) {
