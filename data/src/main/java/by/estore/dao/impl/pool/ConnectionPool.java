@@ -15,16 +15,7 @@ import java.util.concurrent.Executor;
 public final class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
 
-    private static final ConnectionPool instance;
-
-    static {
-        instance = new ConnectionPool();
-        try {
-            instance.init();
-        } catch (ConnectionPoolException e) {
-            logger.error("Error initializing the pool.", e);
-        }
-    }
+    private static final ConnectionPool instance = new ConnectionPool();
 
     private String driver;
     private String url;
@@ -52,7 +43,7 @@ public final class ConnectionPool {
         }
     }
 
-    private void init() throws ConnectionPoolException {
+    public void init() throws ConnectionPoolException {
         Locale.setDefault(Locale.ENGLISH);
         try {
             Class.forName(driver);

@@ -530,7 +530,7 @@ public class ProductDAOImpl implements ProductDAO {
             }
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            connectionPool.closeConnection(connection, preparedStatement);
         }
     }
 }

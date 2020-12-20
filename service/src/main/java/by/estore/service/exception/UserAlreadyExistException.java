@@ -1,6 +1,7 @@
 package by.estore.service.exception;
 
 public class UserAlreadyExistException extends RuntimeException {
+    private static final long serialVersionUID = -6244986964817710202L;
 
     public final String NAME = "userAlreadyExist";
 

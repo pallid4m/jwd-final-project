@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class MainController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 8711213919351163804L;
+
     private static final Logger logger = LogManager.getLogger(MainController.class);
 
     private static final String COMMAND_PARAM = "command";

@@ -3,7 +3,7 @@ package by.estore.dto;
 import java.io.Serializable;
 
 public class ProfileDto implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -9188157388558113974L;
 
     private String email;
     private String oldPassword;

@@ -1,6 +1,7 @@
 package by.estore.dao.exception;
 
 public class ConnectionPoolException extends Exception {
+    private static final long serialVersionUID = 2875875891371976522L;
 
     public ConnectionPoolException() {
         super();

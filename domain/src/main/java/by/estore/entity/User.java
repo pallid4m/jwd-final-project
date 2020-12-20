@@ -1,13 +1,12 @@
 package by.estore.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6804251969637130697L;
 
     private Long id;
     private String email;

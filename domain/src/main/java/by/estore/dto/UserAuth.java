@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class UserAuth implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8022144339007897505L;
 
     private String email;
     private String password;

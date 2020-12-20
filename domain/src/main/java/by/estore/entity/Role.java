@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Role implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5926539894735369488L;
 
     private Byte id;
     private String name;

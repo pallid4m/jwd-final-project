@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Currency implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4753063057012558886L;
 
     private Short id;
     private String code;

@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class LocalizationFilter extends HttpFilter {
+    private static final long serialVersionUID = 5709471795275567703L;
+
     private static final Logger logger = LogManager.getLogger(LocalizationFilter.class);
 
     private static final Locale EN_US_LOCALE = new Locale("en", "US");

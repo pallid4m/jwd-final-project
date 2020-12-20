@@ -18,6 +18,8 @@ import java.util.Objects;
 
 @WebFilter("/main")
 public class AuthenticationFilter extends HttpFilter {
+    private static final long serialVersionUID = 2012876942981847669L;
+
     private static final Logger logger = LogManager.getLogger(AuthenticationFilter.class);
 
     private static final String CSRF_TOKEN = "csrf_token";

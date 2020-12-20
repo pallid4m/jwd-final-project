@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Order implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 8744227046050815683L;
 
     private Long id;
     private LocalDateTime createDate;

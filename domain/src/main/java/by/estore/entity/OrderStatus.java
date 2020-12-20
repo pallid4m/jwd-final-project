@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class OrderStatus implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -719537741065525734L;
 
     public enum State {
         PROCESSING,

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Category implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5160010225671594899L;
 
     private Short id;
     private String name;

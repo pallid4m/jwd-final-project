@@ -26,7 +26,6 @@ public class CharsetFilter implements Filter {
         if (request.getCharacterEncoding() == null) {
             request.setCharacterEncoding(encoding);
         }
-
         next.doFilter(request, response);
     }
 }
